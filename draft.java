@@ -64,7 +64,7 @@ public class main {
 		System.out.println("Approximate O2 Start Escape Time: " + oSET);
 		coSET = coStartEscapeTime(canisters, fitSurv, unfitSurv, flood, coConc, vBreath, temp, remainingHr);
 		System.out.println("Approximate CO2 Start Escape Time: " + coSET);
-		if (oSET > coSET) {
+		if (oSET < coSET) {
 			System.out.println("Time to escape: " + oSET);
 		} else {
 			System.out.println("Time to escape: " + coSET);
