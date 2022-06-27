@@ -127,7 +127,7 @@ public class main {
 		int fit = fitSurv;
 		int unfit = unfitSurv;
 		int survivors = fit + unfit;
-		double w = (double)survivors/2.0;
+		double w = (double)fit/2.0;
 		int escapeCycles = (int) Math.round(w);
 		double escaperHr = escapeCycles*.25*(fit - (2*(escapeCycles + 1)/2));
 		double nonEscaperHr = (survivors-fit)*fit/(1/.25 * 2);
@@ -169,8 +169,10 @@ public class main {
 		double temperature = temp + 459.67;
 		double volumeCompt = (100-percentFlood)*62800/100;
 		int survivors = fit + unfit;
-		double tCandles = ((double)cand*115.0)/(double)survivors;
-		double numerator = ((concInt*volumeCompt)-(.13*volumeBreath))*(1/.7302)*(1/temperature)-breathingHr*.0838*(1/32);
+		double tCandles = ((double)cand*115.0 - breathingHr)/(double)survivors;
+		double numerator1 = ((concInt*volumeCompt)-(.13*volumeBreath))*(1/.7302)*(1/temperature);
+		double numerator2 = breathingHr*.0838*(1/32.0);
+		double numerator = numerator1-numerator2;
 		double denominator = (double)survivors*.0838*(1/32.0);
 		double oWaitTime = numerator/denominator;
 		double oSET = oWaitTime+tCandles;
@@ -191,12 +193,46 @@ public class main {
 		double volumeCompt = (100-percentFlood)*62800/100;
 		int survivors = fit + unfit;
 		double tLiOH = (cani*73)/survivors;
-		double numerator = ((.06*volumeBreath)-(concInt*volumeCompt))*(1/.7302)*(1/temperature)-breathingHr*.1*(1/44);
+		double numerator = ((.06*volumeBreath)-(concInt*volumeCompt))*(1/.7302)*(1/temperature)-breathingHr*.1*(1/44.0);
 		double denominator = (double)survivors*.1*(1.0/44.0);
 		double coWaitingTime = numerator/denominator;
 		double coSET = coWaitingTime + tLiOH;
 		return coSET;
 	}
 	
+	static double eabStartEscapeTime(int canisters, int fitSurv, int unfitSurv, int flood, double coConc, double vBreath, double temp, double g) {
+		/*
+		 * Time to start escapes if all survivors are using EABs
+		 */
+		int fit = fitSurv;
+		int unfit = unfitSurv;
+		int cani = canisters;
+		int percentFlood = flood;
+		double concInt = coConc/100.0;
+		double volumeBreath = vBreath;
+		double breathingHr = g;
+		double temperature = temp + 459.67;
+		double volumeCompt = (100-percentFlood)*62800/100;
+		int survivors = fit + unfit;
+		double tLiOH = (cani*73)/survivors;
+		double numerator = ((.06*volumeBreath)-(concInt*volumeCompt))*(1/.7302)*(1/temperature)-breathingHr*.1*(1/44);
+		double denominator = (double)survivors*.1*(1.0/44.0);
+		double coWaitingTime = numerator/denominator;
+		double coSET = coWaitingTime + tLiOH;
+		return coSET;
+	}
+	static double pFinal(int flood, double presATA, double vBreath){
+		/*
+		 * Final escape pressure in ATA
+		 */
+		int percentFlood = flood;
+		double pressure = presATA;
+		double volumeBreath = vBreath;
+		double volumeCompt = (100-percentFlood)*62800/100;
+		double airAddedByEscapes = 8*pressure*(144+3.33); 
+		double pFinal = ((volumeCompt)*pressure+airAddedByEscapes)/volumeBreath;
+		
+		return .1;
+	}
 
 }
