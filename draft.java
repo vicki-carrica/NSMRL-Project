@@ -1,4 +1,3 @@
-package project.NSMRL;
 import java.util.Scanner;
 
 public class main {
