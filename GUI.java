@@ -10,6 +10,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Dimension;
 import javax.swing.JTextField;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
 
 public class GUI implements ActionListener
 {
@@ -22,6 +24,7 @@ public class GUI implements ActionListener
     JLabel label3;
     JLabel label4;
     JLabel label5;
+    JLabel label6;
     JButton button;
     JLabel spacer;
     SpinnerModel model;
@@ -35,6 +38,7 @@ public class GUI implements ActionListener
     double temp = 0.0;
     double oConc = 0.0;
     double coConc = 0.0;
+    String eabs = new String("");
     String in;
     
     public GUI()
@@ -53,18 +57,53 @@ public class GUI implements ActionListener
         label3 = new JLabel("");
         label4 = new JLabel("");
         label5 = new JLabel("");
+        label6 = new JLabel("");
         
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(500, 500));
         frame.setTitle("Our GUI");
-        JPanel panel = new JPanel();
-        panel.add(label);
-        panel.add(textField);
-        panel.add(button);
-        panel.add(label2);
-        panel.add(label3);
-        panel.add(label4);
-        panel.add(label5);
+        panel = new JPanel(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.weightx = 0.5;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 0;
+        panel.add(label, c);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.5;
+        c.gridx = 0;
+        c.gridy = 1;
+        panel.add(textField, c);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.5;
+        c.gridx = 1;
+        c.gridy = 1;
+        panel.add(button, c);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.5;
+        c.gridx = 0;
+        c.gridy = 2;
+        panel.add(label2, c);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.5;
+        c.gridx = 0;
+        c.gridy = 3;
+        panel.add(label3, c);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.5;
+        c.gridx = 0;
+        c.gridy = 4;
+        panel.add(label4, c);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.5;
+        c.gridx = 0;
+        c.gridy = 5;
+        panel.add(label5, c);
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.weightx = 0.5;
+        c.gridx = 0;
+        c.gridy = 6;
+        panel.add(label6, c);
         frame.add(panel);
         frame.pack();
         frame.setVisible(true);
@@ -110,11 +149,15 @@ public class GUI implements ActionListener
             label.setText("Input the initial concentration (in %SEV) of oxygen:");
         }else if (count == 8){
             oConc = Double.parseDouble(in);
-            button.setText("Calculate");
             label2.setText("Oxygen concentration: "+oConc);
             label.setText("Input the initial concentration (in %SEV) of carbon dioxide:");
-        } else if (count==9){
+        } else if (count == 9){
             coConc = Double.parseDouble(in);
+            label2.setText("Carbon dioxide concentration: "+coConc);
+            button.setText("Calculate");
+            label.setText("Input Y if all sailors are wearing EABs and N otherwise: ");
+        }else if (count==10){
+            eabs = in;
             label2.setText("Carbon dioxide concentration: "+coConc);
             double oSurvTime = oxSurvTime(fitSurv, unfitSurv, candles, flood, oConc, temp);
             label2.setText("Oxygen survival time: " + oSurvTime + " hours");
@@ -123,10 +166,17 @@ public class GUI implements ActionListener
             double remainingHr = hourBreathing(fitSurv, unfitSurv);
             double presATA = fswToATA(pressure);
             double vBreath = calcVBreath(flood, fitSurv, presATA);
+            double finalP = pFinal(flood, presATA, vBreath);
             double oSET = oStartEscapeTime(candles, fitSurv, unfitSurv, flood, oConc, vBreath, temp, remainingHr);
             label4.setText("Oxygen Start Escape Time: " + oSET + " hours");
             double coSET = coStartEscapeTime(canisters, fitSurv, unfitSurv, flood, coConc, vBreath, temp, remainingHr);
             label5.setText("Carbon dioxide Start Escape Time: " + coSET + " hours");
+            if (eabs.equals("Y")){
+                double eabSET = eabStartEscapeTime(fitSurv, unfitSurv, finalP, vBreath, remainingHr);
+                label6.setText("EAB Start Escape Time: " + eabSET);
+            } else {
+                label6.setText("EABs start escape time: N/A");
+            }
         }else {
             label.setText("Start Escape Times:");
         }
@@ -160,24 +210,24 @@ public class GUI implements ActionListener
         return OSurvivalTime;
     }
     static double coSurvTime(int canisters, int fitSurv, int unfitSurv, double coConc, int flood, double temp) {
-	/*
-	 * Function calculates approximate survival time based on carbon dioxide if depth prevents escape
-	 */
-	int fit = fitSurv;
-	int unfit = unfitSurv;
-	int cani = canisters;
-	int percentFlood = flood;
-	double coConcentration = coConc/100.0;
-	double temperature = temp + 459.67;
-	double volumeCompt = (100-percentFlood)*62800/100;
-	int survivors = fit + unfit;
-	double tLiOH = (cani*73)/survivors;
-	double numerator = (1.0/.7302)*volumeCompt*(.06 - coConcentration)*(1.0/temperature);
-	double denominator = (survivors * 0.1)/44;
-	double tCO = numerator/denominator;
-	
-	double coSurvivalTime = tLiOH + tCO;
-	return coSurvivalTime;
+    /*
+     * Function calculates approximate survival time based on carbon dioxide if depth prevents escape
+     */
+    int fit = fitSurv;
+    int unfit = unfitSurv;
+    int cani = canisters;
+    int percentFlood = flood;
+    double coConcentration = coConc/100.0;
+    double temperature = temp + 459.67;
+    double volumeCompt = (100-percentFlood)*62800/100;
+    int survivors = fit + unfit;
+    double tLiOH = (cani*73)/survivors;
+    double numerator = (1.0/.7302)*volumeCompt*(.06 - coConcentration)*(1.0/temperature);
+    double denominator = (survivors * 0.1)/44;
+    double tCO = numerator/denominator;
+    
+    double coSurvivalTime = tLiOH + tCO;
+    return coSurvivalTime;
     }
     static double hourBreathing(int fitSurv, int unfitSurv) {
         /*
@@ -255,5 +305,33 @@ public class GUI implements ActionListener
         double coWaitingTime = numerator/denominator;
         double coSET = coWaitingTime + tLiOH;
         return coSET;
+    }
+    static double eabStartEscapeTime(int fitSurv, int unfitSurv, double pressure, double vBreath, double g) {
+        /*
+         * Time to start escapes if all survivors are using EABs
+         */
+        int fit = fitSurv;
+        int unfit = unfitSurv;
+        double volumeBreath = vBreath;
+        double breathingHr = g;
+        double pFinal = pressure;
+        int survivors = fit + unfit;
+        double numerator = (1.697 - pFinal)*vBreath-(breathingHr*20.0);
+        double denominator = (double)survivors*20.0;
+        double eabStartTime = numerator/denominator;
+        return eabStartTime;
+    }
+    static double pFinal(int flood, double presATA, double vBreath){
+        /*
+         * Final escape pressure in ATA
+         */
+        int percentFlood = flood;
+        double pressure = presATA;
+        double volumeBreath = vBreath;
+        double volumeCompt = (100-percentFlood)*62800/100;
+        double airAddedByEscapes = 8*pressure*(144+3.33); 
+        double pFinal = ((volumeCompt)*pressure+airAddedByEscapes)/volumeBreath;
+        
+        return pFinal;
     }
 }
