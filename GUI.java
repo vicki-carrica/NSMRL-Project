@@ -12,6 +12,7 @@ import java.awt.Dimension;
 import javax.swing.JTextField;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class GUI implements ActionListener
 {
@@ -72,14 +73,18 @@ public class GUI implements ActionListener
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
         c.gridx = 0;
+        c.gridwidth = 1;
         c.gridy = 1;
         panel.add(textField, c);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 0.5;
+        c.insets = new Insets(0,10,0,0);
         c.gridx = 1;
+        c.gridwidth = 1;
         c.gridy = 1;
         panel.add(button, c);
         c.fill = GridBagConstraints.HORIZONTAL;
+        c.insets = new Insets(0,0,0,0);
         c.weightx = 0.5;
         c.gridx = 0;
         c.gridy = 2;
@@ -160,20 +165,35 @@ public class GUI implements ActionListener
             eabs = in;
             label2.setText("Carbon dioxide concentration: "+coConc);
             double oSurvTime = oxSurvTime(fitSurv, unfitSurv, candles, flood, oConc, temp);
-            label2.setText("Oxygen survival time: " + oSurvTime + " hours");
+            int osDays = (int)oSurvTime/24;
+            int osHours = (int)oSurvTime - 24*osDays;
+            int osMins = (int) ((oSurvTime - (double)(osDays *24+osHours))*60.0);
+            label2.setText("Oxygen survival time: " + osDays + " days " + osHours + " hours " + osMins + " minutes");
             double coSurvTime = coSurvTime(canisters, fitSurv, unfitSurv, coConc, flood, temp);
-            label3.setText("Carbon dioxide survival time: " + coSurvTime + " hours");
+            int cosDays = (int)coSurvTime/24;
+            int cosHours = (int)coSurvTime - 24*cosDays;
+            int cosMins = (int) ((coSurvTime - (double)(cosDays *24+cosHours))*60.0);
+            label3.setText("Carbon dioxide survival time: " + cosDays + " days " + cosHours + " hours " + cosMins + " minutes");
             double remainingHr = hourBreathing(fitSurv, unfitSurv);
             double presATA = fswToATA(pressure);
             double vBreath = calcVBreath(flood, fitSurv, presATA);
             double finalP = pFinal(flood, presATA, vBreath);
             double oSET = oStartEscapeTime(candles, fitSurv, unfitSurv, flood, oConc, vBreath, temp, remainingHr);
-            label4.setText("Oxygen Start Escape Time: " + oSET + " hours");
+            int osetDays = (int)oSET/24;
+            int osetHours = (int)oSET - 24*osetDays;
+            int osetMins = (int) ((oSET - (double)(osetDays *24+osetHours))*60.0);
+            label4.setText("Oxygen Start Escape Time: " + osetDays + " days " + osetHours + " hours " + osetMins + " minutes");
             double coSET = coStartEscapeTime(canisters, fitSurv, unfitSurv, flood, coConc, vBreath, temp, remainingHr);
-            label5.setText("Carbon dioxide Start Escape Time: " + coSET + " hours");
+            int cosetDays = (int)coSET/24;
+            int cosetHours = (int)coSET - 24*cosetDays;
+            int cosetMins = (int) ((coSET - (double)(cosetDays *24+cosetHours))*60.0);
+            label5.setText("Carbon dioxide Start Escape Time: " + cosetDays + " days " + cosetHours + " hours " + cosetMins + " minutes");
             if (eabs.equals("Y")){
                 double eabSET = eabStartEscapeTime(fitSurv, unfitSurv, finalP, vBreath, remainingHr);
-                label6.setText("EAB Start Escape Time: " + eabSET);
+                int eabsetDays = (int)eabSET/24;
+                int eabsetHours = (int)eabSET - 24*eabsetDays;
+                int eabsetMins = (int) ((eabSET - (double)(eabsetDays *24+eabsetHours))*60.0);
+                label6.setText("EAB Start Escape Time: " + + eabsetDays + " days " + eabsetHours + " hours " + eabsetMins + " minutes");
             } else {
                 label6.setText("EABs start escape time: N/A");
             }
