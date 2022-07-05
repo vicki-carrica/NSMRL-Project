@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Color;
 
 public class GUI implements ActionListener
 {
@@ -59,10 +60,12 @@ public class GUI implements ActionListener
         label4 = new JLabel("");
         label5 = new JLabel("");
         label6 = new JLabel("");
+        Color customBlue = new Color(162, 189, 235);
         
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(500, 500));
         frame.setTitle("Our GUI");
+        frame.getContentPane().setBackground(customBlue);
         panel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.weightx = 0.5;
@@ -355,3 +358,4 @@ public class GUI implements ActionListener
         return pFinal;
     }
 }
+
