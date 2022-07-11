@@ -246,7 +246,7 @@ helpButt = Button(frame1, text="Help", command=helpClick, padx=10)
 helpButt.grid(row=0, column=0, padx=10)
 helpButt.config(font=('Fixedsys', 6), bg='white')
 
-f = Figure(figsize=(3,3), dpi=100) 
+f = Figure(figsize=(2,2), dpi=100) 
 a = f.add_subplot(111)
 a.plot([1,2,3,4,5,6,7,8],[1,2,3,4,5,6,7,8])
 
