@@ -1,7 +1,18 @@
 import math
+import tkinter as tk
 from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib
+try:
+    from matplotlib.backends.backend_tkagg import NavigationToolbar2TkAgg
+except ImportError:
+    from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk as NavigationToolbar2TkAgg
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.figure import Figure
+matplotlib.use("TkAgg")
 
 root = Tk()
 root.title('GUI')
@@ -235,5 +246,17 @@ plotDataButt.config(font=('Fixedsys', 10), bg='white')
 helpButt = Button(frame1, text="Help", command=helpClick, padx=10)
 helpButt.grid(row=0, column=0, padx=10)
 helpButt.config(font=('Fixedsys', 6), bg='white')
+
+f = Figure(figsize=(4,4), dpi=100) 
+a = f.add_subplot(111)
+a.plot([1,2,3,4,5,6,7,8],[1,2,3,4,5,6,7,8])
+
+canvas = FigureCanvasTkAgg(f, frame2)
+canvas.draw()
+canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+toolbar = NavigationToolbar2TkAgg(canvas, frame2)
+toolbar.update()
+canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
 root.mainloop()
