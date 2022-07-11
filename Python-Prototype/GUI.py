@@ -10,7 +10,7 @@ width = root.winfo_screenwidth()
 height = root.winfo_screenheight()
 
 s = ttk.Style()
-s.configure('TNotebook.Tab', font=('Fixedsys','4'))
+s.configure('TNotebook.Tab', font=('Fixedsys','15'))
 
 notebook = ttk.Notebook(root)
 notebook.grid(row=0,column=0)
@@ -237,4 +237,3 @@ helpButt.grid(row=0, column=0, padx=10)
 helpButt.config(font=('Fixedsys', 6), bg='white')
 
 root.mainloop()
-
