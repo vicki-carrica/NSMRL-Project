@@ -11,6 +11,7 @@ except ImportError:
     from matplotlib.backends.backend_tkagg import NavigationToolbar2Tk as NavigationToolbar2TkAgg
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
+import time
 matplotlib.use("TkAgg")
 
 root = Tk()
@@ -114,6 +115,10 @@ def pFinal(percentFlood, pressure, volumeBreath):
     return pFinal
 
 
+oxY = []
+oxX = []
+start = time.time()
+counter = 0
 fitLabel = Label(frame1, text="Fit survivors: ")
 fitLabel.grid(row=1, column=0)
 fitLabel.config(font=('Fixedsys',15))
@@ -189,66 +194,8 @@ coSETLabel.config(font=('Fixedsys', 12))
 eabSETLabel = Label(frame1, text=" ")
 eabSETLabel.grid(row=8, column=2, columnspan=2, pady=10)
 eabSETLabel.config(font=('Fixedsys', 12))
-
-def enterClick():
-    fitSurv = int(fitEnter.get())
-    unfitSurv = int(unfitEnter.get())
-    candles = int(candEnter.get())
-    canisters = int(caniEnter.get())
-    pressure = float(pressEnter.get())
-    flood = int(floodEnter.get())
-    temp = float(tempEnter.get())
-    oConc = float(oxEnter.get())
-    coConc = float(coEnter.get())
-    eabs = int(eabsEnter.get())
-
-    oSurvTime = oxSurvTime(fitSurv, unfitSurv, candles, flood, oConc, temp)
-    oSTDay = math.floor(oSurvTime/24)
-    oSTHr = math.floor(oSurvTime-24*oSTDay)
-    coST = coSurvTime(fitSurv, unfitSurv, canisters, flood, coConc, temp)
-    coSTDay = math.floor(coST/24)
-    coSTHr = math.floor(coST-24*coSTDay)
-    remainingHr = hourBreathing(fitSurv, unfitSurv)
-    presATA = fswToATA(pressure)
-    vBreath = calcVBreath(flood, fitSurv, presATA)
-    finalP = pFinal(flood, presATA, vBreath)
-    oSET = oStartEscapeTime(candles, fitSurv, unfitSurv, flood, oConc, vBreath, temp, remainingHr)
-    oSETDay = math.floor(oSET/24)
-    oSETHr = math.floor(oSET-24*oSETDay)
-    coSET = coStartEscapeTime(canisters, fitSurv, unfitSurv, flood, coConc, vBreath, temp, remainingHr)
-    coSETDay = math.floor(coSET/24)
-    coSETHr = math.floor(coSET-24*coSETDay)
-
-    oSTLabel.config(text="Oxygen survival time:\n " + str(oSTDay) + " day " + str(oSTHr) + " hr")
-    coSTLabel.config(text="Carbon dioxide survival time:\n " + str(coSTDay) + " day " + str(coSTHr) + " hr")
-    oSETLabel.config(text="Oxygen start escape time:\n " + str(oSETDay) + " day " + str(oSETHr) + " hr")
-    coSETLabel.config(text="Carbon dioxide start escape time:\n " + str(coSETDay) + " day " + str(coSETHr) + " hr")
-    if eabs==(fitSurv+unfitSurv):
-        eabSET = eabStartEscapeTime(fitSurv, unfitSurv, finalP, vBreath, remainingHr)
-        eabSETDay = math.floor(eabSET/24)
-        eabSETHr = math.floor(eabSET-24*eabSETDay)
-        eabSETLabel.config(text="EABs start escape time:\n " + str(eabSETDay) + " day " + str(eabSETHr) + " hr")
-    else:
-        eabSET="NA"
-        eabSETLabel.config(eabSETLabel.config(text="EABs start escape time:\n N/A"))
-
-def helpClick():
-    message = "Intructions: \n Input the data on the submarine compartment.\n Fit survivors: sailors who have full use of both arms and can stand upright in the flooding escape trunk.\n Unfit survivors: sailors who are unable to complete the task but are still breathing.\n Chlorate candles: release oxygen into the atmosphere.\n ExtendAir kits: intake carbon dioxide from the atmosphere.\n "
-    messagebox.showinfo("Help", message)
-
-enterButt = Button(frame1, text="Enter", fg="purple", command=enterClick, padx=20, pady=10)
-enterButt.grid(row=6, column=1, pady=10)
-enterButt.config(font=('Fixedsys', 10), bg='white')
-plotDataButt = Button(frame1, text="Plot Data", fg="purple", padx=20, pady=10)
-plotDataButt.grid(row=6, column=3)
-plotDataButt.config(font=('Fixedsys', 10), bg='white')
-helpButt = Button(frame1, text="Help", fg="purple", command=helpClick, padx=20, pady=10)
-helpButt.grid(row=1, column=5, padx=10, pady=10)
-helpButt.config(font=('Fixedsys', 10), bg='white')
-
 f = Figure(figsize=(2,2), dpi=70) 
 a = f.add_subplot(111)
-a.plot([1,2,3,4,5,6,7,8],[1,2,3,4,5,6,7,8])
 
 canvas = FigureCanvasTkAgg(f, frame2)
 canvas.draw()
@@ -257,5 +204,81 @@ canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 toolbar = NavigationToolbar2TkAgg(canvas, frame2)
 toolbar.update()
 canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH)
+
+def enterClick():
+    try:
+        fitSurv = int(fitEnter.get())
+        unfitSurv = int(unfitEnter.get())
+        candles = int(candEnter.get())
+        canisters = int(caniEnter.get())
+        pressure = float(pressEnter.get())
+        flood = int(floodEnter.get())
+        temp = float(tempEnter.get())
+        oConc = float(oxEnter.get())
+        coConc = float(coEnter.get())
+        eabs = int(eabsEnter.get())
+
+        oSurvTime = oxSurvTime(fitSurv, unfitSurv, candles, flood, oConc, temp)
+        oSTDay = math.floor(oSurvTime/24)
+        oSTHr = math.floor(oSurvTime-24*oSTDay)
+        coST = coSurvTime(fitSurv, unfitSurv, canisters, flood, coConc, temp)
+        coSTDay = math.floor(coST/24)
+        coSTHr = math.floor(coST-24*coSTDay)
+        remainingHr = hourBreathing(fitSurv, unfitSurv)
+        presATA = fswToATA(pressure)
+        vBreath = calcVBreath(flood, fitSurv, presATA)
+        finalP = pFinal(flood, presATA, vBreath)
+        oSET = oStartEscapeTime(candles, fitSurv, unfitSurv, flood, oConc, vBreath, temp, remainingHr)
+        oSETDay = math.floor(oSET/24)
+        oSETHr = math.floor(oSET-24*oSETDay)
+        coSET = coStartEscapeTime(canisters, fitSurv, unfitSurv, flood, coConc, vBreath, temp, remainingHr)
+        coSETDay = math.floor(coSET/24)
+        coSETHr = math.floor(coSET-24*coSETDay)
+
+        oSTLabel.config(text="Oxygen survival time:\n " + str(oSTDay) + " day " + str(oSTHr) + " hr")
+        coSTLabel.config(text="Carbon dioxide survival time:\n " + str(coSTDay) + " day " + str(coSTHr) + " hr")
+        oSETLabel.config(text="Oxygen start escape time:\n " + str(oSETDay) + " day " + str(oSETHr) + " hr")
+        coSETLabel.config(text="Carbon dioxide start escape time:\n " + str(coSETDay) + " day " + str(coSETHr) + " hr")
+        if eabs==(fitSurv+unfitSurv):
+            eabSET = eabStartEscapeTime(fitSurv, unfitSurv, finalP, vBreath, remainingHr)
+            eabSETDay = math.floor(eabSET/24)
+            eabSETHr = math.floor(eabSET-24*eabSETDay)
+            eabSETLabel.config(text="EABs start escape time:\n " + str(eabSETDay) + " day " + str(eabSETHr) + " hr")
+        else:
+            eabSET="NA"
+            eabSETLabel.config(eabSETLabel.config(text="EABs start escape time:\n N/A"))
+    except ValueError:
+        messagebox.showwarning("VALUE ERROR","Invalid Inputs\nPlease do not leave blank boxes")
+    
+
+def helpClick():
+    message = "Intructions: \n Input the data on the submarine compartment.\n Fit survivors: sailors who have full use of both arms and can stand upright in the flooding escape trunk.\n Unfit survivors: sailors who are unable to complete the task but are still breathing.\n Chlorate candles: release oxygen into the atmosphere.\n ExtendAir kits: intake carbon dioxide from the atmosphere.\n "
+    messagebox.showinfo("Help", message)
+
+def plotClick():
+    global counter
+    global start
+    counter=counter+1
+    if counter==1:
+        start = time.time()
+    oxY.append(float(oxEnter.get()))
+    current = time.time()
+    t = current - start
+    oxX.append(t)
+    a.plot(oxX, oxY)
+
+
+
+enterButt = Button(frame1, text="Enter", fg="purple", command=enterClick, padx=20, pady=10)
+enterButt.grid(row=6, column=1, pady=10)
+enterButt.config(font=('Fixedsys', 10), bg='white')
+plotDataButt = Button(frame1, text="Plot Data", fg="purple", command = plotClick, padx=20, pady=10)
+plotDataButt.grid(row=6, column=3)
+plotDataButt.config(font=('Fixedsys', 10), bg='white')
+helpButt = Button(frame1, text="Help", fg="purple", command=helpClick, padx=20, pady=10)
+helpButt.grid(row=1, column=5, padx=10, pady=10)
+helpButt.config(font=('Fixedsys', 10), bg='white')
+
+
 
 root.mainloop()
