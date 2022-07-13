@@ -1,4 +1,5 @@
 import math
+from multiprocessing import context
 import tkinter as tk
 from tkinter import *
 from tkinter import messagebox
@@ -22,14 +23,29 @@ height = root.winfo_screenheight()
 
 s = ttk.Style()
 s.configure('TNotebook.Tab', font=('Fixedsys','15'))
+s.configure('Treeview', font=('Fixedsys','10'))
+s.configure('Treeview.Heading', font=('Fixedsys','15'))
 
 notebook = ttk.Notebook(root)
 notebook.grid(row=0,column=0)
 frame1 = Frame(notebook, width=800, height=800)
 frame2 = Frame(notebook, width=800, height=480)
+frame3 = Frame(notebook, width=800, height=480)
 
-notebook.add(frame1, text="Data")
+notebook.add(frame1, text="Input")
 notebook.add(frame2, text="Graph")
+notebook.add(frame3, text="Data")
+
+book2 = ttk.Notebook(frame2)
+book2.grid(row=0, column=0)
+oFrame = Frame(book2, width=760, height=430)
+coFrame = Frame(book2, width=760, height=430)
+pFrame = Frame(book2, width=760, height=430)
+book2.add(oFrame, text="Oxygen")
+book2.add(coFrame, text="Carbon Dioxide")
+book2.add(pFrame, text="Pressure")
+
+data = ttk.Treeview(frame3)
 
 
 def oxSurvTime(fit, unfit, cand, percentFlood, oxConc, temp):
@@ -117,6 +133,10 @@ def pFinal(percentFlood, pressure, volumeBreath):
 
 oxY = []
 oxX = []
+coY = []
+coX = []
+pY = []
+pX = []
 start = time.time()
 counter = 0
 fitLabel = Label(frame1, text="Fit survivors: ")
@@ -194,16 +214,54 @@ coSETLabel.config(font=('Fixedsys', 12))
 eabSETLabel = Label(frame1, text=" ")
 eabSETLabel.grid(row=8, column=2, columnspan=2, pady=10)
 eabSETLabel.config(font=('Fixedsys', 12))
-f = Figure(figsize=(2,2), dpi=70) 
-a = f.add_subplot(111)
+fO = Figure(figsize=(9,4.5), dpi=80) 
+fCO = Figure(figsize=(9,4.5), dpi=80) 
+fP = Figure(figsize=(9,4.5), dpi=80) 
+o = fO.add_subplot(111)
+o.set_ylim([13, 25])
+c = fCO.add_subplot(111)
+c.set_ylim([0, 6])
+p = fP.add_subplot(111)
+p.set_ylim([0, 25])
 
-canvas = FigureCanvasTkAgg(f, frame2)
+
+
+canvas = FigureCanvasTkAgg(fO, oFrame)
 canvas.draw()
 canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
-toolbar = NavigationToolbar2TkAgg(canvas, frame2)
+toolbar = NavigationToolbar2TkAgg(canvas, oFrame)
 toolbar.update()
 canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH)
+
+canvas = FigureCanvasTkAgg(fCO, coFrame)
+canvas.draw()
+canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+toolbar = NavigationToolbar2TkAgg(canvas, coFrame)
+toolbar.update()
+canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH)
+
+canvas = FigureCanvasTkAgg(fP, pFrame)
+canvas.draw()
+canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+toolbar = NavigationToolbar2TkAgg(canvas, pFrame)
+toolbar.update()
+canvas._tkcanvas.pack(side=tk.TOP, fill=tk.BOTH)
+
+data['columns'] = ("Time", "Oxygen %SEV", "Carbon Dioxide %SEV", "Pressure FSW")
+data.column("#0", width=0, stretch=NO)
+data.column("Time", anchor=W, width=25, minwidth=10)
+data.column("Oxygen %SEV", anchor=W, width=50, minwidth=25)
+data.column("Carbon Dioxide %SEV", anchor=W, width=100, minwidth=50)
+data.column("Pressure FSW", anchor=W, width=50, minwidth=25)
+data.heading("Time", text="Time (s)", anchor=W)
+data.heading("Oxygen %SEV", text="Oxygen (%SEV)", anchor=W)
+data.heading("Carbon Dioxide %SEV", text="Carbon Dioxide (%SEV)", anchor=W)
+data.heading("Pressure FSW", text="Pressure (FSW)", anchor=W)
+
+data.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
 def enterClick():
     try:
@@ -262,10 +320,42 @@ def plotClick():
     if counter==1:
         start = time.time()
     oxY.append(float(oxEnter.get()))
+    coY.append(float(coEnter.get()))
+    pY.append(float(pressEnter.get()))
     current = time.time()
     t = current - start
     oxX.append(t)
-    a.plot(oxX, oxY)
+    coX.append(t)
+    pX.append(t)
+    o.plot(oxX, oxY)
+    c.plot(coX, coY)
+    p.plot(pX, pY)
+    ti = math.floor(t)
+    data.insert(parent='', index='end', iid=(counter-1), values=(ti, oxEnter.get(), coEnter.get(), pressEnter.get()))
+
+def deleteClick():
+    selected_item = data.selection()[0]
+    print(selected_item)
+    try:
+        del oxY[int(selected_item)]
+        del coY[int(selected_item)]
+        del pY[int(selected_item)]
+        del oxX[int(selected_item)]
+        del coX[int(selected_item)]
+        del pX[int(selected_item)]
+        data.delete(selected_item)
+        o.cla()
+        c.cla()
+        p.cla()
+        o.plot(oxX, oxY)
+        c.plot(coX, coY)
+        p.plot(pX, pY)
+        o.set_ylim([13, 25])
+        c.set_ylim([0, 6])
+        p.set_ylim([0, 25])
+    except IndexError:
+        messagebox.showwarning("TYPE ERROR","No data selected")
+
 
 
 
@@ -278,7 +368,8 @@ plotDataButt.config(font=('Fixedsys', 10), bg='white')
 helpButt = Button(frame1, text="Help", fg="purple", command=helpClick, padx=20, pady=10)
 helpButt.grid(row=1, column=5, padx=10, pady=10)
 helpButt.config(font=('Fixedsys', 10), bg='white')
-
-
+deleteButt = Button(frame3, text="Delete", fg="purple", command= deleteClick, padx =10, pady=10)
+deleteButt.config(font=('Fixedsys', 10), bg='white')
+deleteButt.pack()
 
 root.mainloop()
