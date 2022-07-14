@@ -38,9 +38,9 @@ notebook.add(frame3, text="Data")
 
 book2 = ttk.Notebook(frame2)
 book2.grid(row=0, column=0)
-oFrame = Frame(book2, width=760, height=430)
-coFrame = Frame(book2, width=760, height=430)
-pFrame = Frame(book2, width=760, height=430)
+oFrame = Frame(book2, width=770, height=430)
+coFrame = Frame(book2, width=770, height=430)
+pFrame = Frame(book2, width=770, height=430)
 book2.add(oFrame, text="Oxygen")
 book2.add(coFrame, text="Carbon Dioxide")
 book2.add(pFrame, text="Pressure")
@@ -139,6 +139,7 @@ pY = []
 pX = []
 start = time.time()
 counter = 0
+count=0
 fitLabel = Label(frame1, text="Fit survivors: ")
 fitLabel.grid(row=1, column=0)
 fitLabel.config(font=('Fixedsys',15))
@@ -216,13 +217,22 @@ eabSETLabel.grid(row=8, column=2, columnspan=2, pady=10)
 eabSETLabel.config(font=('Fixedsys', 12))
 fO = Figure(figsize=(9,4.5), dpi=80) 
 fCO = Figure(figsize=(9,4.5), dpi=80) 
-fP = Figure(figsize=(9,4.5), dpi=80) 
+fP = Figure(figsize=(9,4.5), dpi=80)
 o = fO.add_subplot(111)
 o.set_ylim([13, 25])
+o.set_title("Oxygen Readings", fontname="Serif")
+o.set_xlabel("Time (seconds)", fontname="Serif")
+o.set_ylabel("Oxygen Concentration (%SEV)", fontname="Serif")
 c = fCO.add_subplot(111)
 c.set_ylim([0, 6])
+c.set_title("Carbon Dioxide Readings", fontname="Serif")
+c.set_xlabel("Time (seconds)", fontname="Serif")
+c.set_ylabel("Carbon Dioxide Concentration (%SEV)", fontname="Serif")
 p = fP.add_subplot(111)
 p.set_ylim([0, 25])
+p.set_title("Pressure Readings", fontname="Serif")
+p.set_xlabel("Time (seconds)", fontname="Serif")
+p.set_ylabel("Pressure (fsw)", fontname="Serif")
 
 
 
@@ -317,10 +327,8 @@ def helpClick():
     helpTab.grid(row=0,column=0)
     h1 = Frame(helpTab, width=800, height=800)
     h2 = Frame(helpTab, width=800, height=480)
-    h3 = Frame(helpTab, width=800, height=480)
     helpTab.add(h1, text="Input Information")
     helpTab.add(h2, text="Instructions")
-    helpTab.add(h3, text="Spreadsheet Information")
 
     fitLabel = Label(h1, text="Fit survivors:", anchor=W)
     fitLabel.grid(row=0, column=0)
@@ -388,7 +396,7 @@ def helpClick():
     instructionLabel = Label(h2, text="Instructions:")
     instructionLabel.grid(row=0, column=0)
     instructionLabel.config(font=('Fixedsys', 20))
-    instr = "-Input atmospheric data found on the submarine in the corresponding slots.\n-Press enter to calculate the survival and start escape times.\n-The shortest start escape time is the true time to start escape.\n-Press plot data to record and graph the atmospheric data.\n-Oxygen, carbon dioxide, and pressure data will be plotted and recorded in\n the 'Data' Tab. Data points can be deleted in the same 'Data' tab.\n-The 'Graph' tab has plots of atmospheric data."
+    instr = "-Input atmospheric data found on the submarine in the corresponding slots.\n-Press enter to calculate the survival and start escape times.\n-The shortest start escape time is the true time to start escape.\n-Press plot data to record and graph the atmospheric data.\n-Oxygen, carbon dioxide, and pressure data will be plotted and recorded in\n the 'Data' Tab. Data points can be deleted in the same tab. Select a row\nand press the 'Delete' button to delete a data point.\n-The 'Graph' tab has plots of atmospheric data.\n-The toolbar has (left to right) a home button, which resets to the \noriginal view, back and forward buttons, a move button, which allows you\n to move and navigate the graph, a zoom button, a configuration button,\n and a save button, which allows you to save the graph as a file."
     instructions = Label(h2, text=instr)
     instructions.grid(row=1, column=0)
     instructions.config(font=('Fixedsys', 15))
@@ -408,34 +416,38 @@ def plotClick():
     oxX.append(t)
     coX.append(t)
     pX.append(t)
-    o.plot(oxX, oxY)
-    c.plot(coX, coY)
-    p.plot(pX, pY)
+    o.plot(oxX, oxY, marker='o', color='darkblue')
+    c.plot(coX, coY, marker='o', color='darkblue')
+    p.plot(pX, pY, marker='o', color='darkblue')
     ti = math.floor(t)
     data.insert(parent='', index='end', iid=(counter-1), values=(ti, oxEnter.get(), coEnter.get(), pressEnter.get()))
 
 def deleteClick():
-    selected_item = data.selection()[0]
-    print(selected_item)
+    global count
     try:
+        selected_item = int(data.selection()[0])-count
+        print(selected_item)
         del oxY[int(selected_item)]
         del coY[int(selected_item)]
         del pY[int(selected_item)]
         del oxX[int(selected_item)]
         del coX[int(selected_item)]
         del pX[int(selected_item)]
-        data.delete(selected_item)
+        print(oxY)
+        data.delete((selected_item+count))
         o.cla()
         c.cla()
         p.cla()
-        o.plot(oxX, oxY)
-        c.plot(coX, coY)
-        p.plot(pX, pY)
+        o.plot(oxX, oxY, marker='o', color='darkblue')
+        c.plot(coX, coY, marker='o', color='darkblue')
+        p.plot(pX, pY, marker='o', color='darkblue')
         o.set_ylim([13, 25])
         c.set_ylim([0, 6])
         p.set_ylim([0, 25])
+        count = count+1
+        
     except IndexError:
-        messagebox.showwarning("TYPE ERROR","No data selected")
+        messagebox.showwarning("INDEX ERROR","No data selected")
 
 
 
