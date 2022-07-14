@@ -396,10 +396,10 @@ def helpClick():
     instructionLabel = Label(h2, text="Instructions:")
     instructionLabel.grid(row=0, column=0)
     instructionLabel.config(font=('Fixedsys', 20))
-    instr = "-Input atmospheric data found on the submarine in the corresponding slots.\n-Press enter to calculate the survival and start escape times.\n-The shortest start escape time is the true time to start escape.\n-Press plot data to record and graph the atmospheric data.\n-Oxygen, carbon dioxide, and pressure data will be plotted and recorded in\n the 'Data' Tab. Data points can be deleted in the same tab. Select a row\nand press the 'Delete' button to delete a data point.\n-The 'Graph' tab has plots of atmospheric data.\n-The toolbar has (left to right) a home button, which resets to the \noriginal view, back and forward buttons, a move button, which allows you\n to move and navigate the graph, a zoom button, a configuration button,\n and a save button, which allows you to save the graph as a file."
+    instr = "-Input atmospheric data found on the submarine in the corresponding slots.\n\n-Press enter to calculate the survival and start escape times.\n\n-The shortest start escape time is the true time to start escape.\n\n-Press plot data to record and graph the atmospheric data.\n\n-Oxygen, carbon dioxide, and pressure data will be plotted and recorded in\n the 'Data' Tab. Data points can be deleted in the same tab. Select a row\nand press the 'Delete' button to delete a data point.\n\n-The 'Graph' tab has plots of atmospheric data.\n\n-The toolbar has (left to right) a home button, which resets to the \noriginal view, back and forward buttons, a move button, which allows you\n to move and navigate the graph, a zoom button, a configuration button,\n and a save button, which allows you to save the graph as a file."
     instructions = Label(h2, text=instr)
     instructions.grid(row=1, column=0)
-    instructions.config(font=('Fixedsys', 15))
+    instructions.config(font=('Fixedsys', 10))
 
 
 def plotClick():
