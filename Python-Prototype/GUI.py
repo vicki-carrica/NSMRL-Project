@@ -319,62 +319,80 @@ def helpClick():
     h2 = Frame(helpTab, width=800, height=480)
     h3 = Frame(helpTab, width=800, height=480)
     helpTab.add(h1, text="Input Information")
-    helpTab.add(h2, text="Input Instructions")
+    helpTab.add(h2, text="Instructions")
     helpTab.add(h3, text="Spreadsheet Information")
+
     fitLabel = Label(h1, text="Fit survivors:", anchor=W)
     fitLabel.grid(row=0, column=0)
     fitLabel.config(font=('Fixedsys', 15))
     fitInfo = Label(h1, text="Sailors that have full use of both arms and can stand upright in a flooding escape trunk")
     fitInfo.grid(row=1, column=0)
     fitInfo.config(font=('Fixedsys', 10))
+
     unfitLabel = Label(h1, text="Unfit survivors:", anchor=W)
     unfitLabel.grid(row=2, column=0)
     unfitLabel.config(font=('Fixedsys', 15))
     unfitInfo = Label(h1, text="Sailors that are unable to escape but still intake oxygen and exhale carbon dioxide")
     unfitInfo.grid(row=3, column=0)
     unfitInfo.config(font=('Fixedsys', 10))
+
     candleLabel = Label(h1, text="Chlorate candles:", anchor=W)
     candleLabel.grid(row=4, column=0)
     candleLabel.config(font=('Fixedsys', 15))
     candleInfo = Label(h1, text="Candles that release oxygen into the atmosphere")
     candleInfo.grid(row=5, column=0)
     candleInfo.config(font=('Fixedsys', 10))
+
     extendAirLabel = Label(h1, text="ExtendAir Kits:", anchor=W)
     extendAirLabel.grid(row=6, column=0)
     extendAirLabel.config(font=('Fixedsys', 15))
     extendAirInfo = Label(h1, text="Intake carbon dioxide from the atmosphere through a reaction with lithium hydroxide")
     extendAirInfo.grid(row=7, column=0)
     extendAirInfo.config(font=('Fixedsys', 10))
+
     pressureLabel = Label(h1, text="Pressure:", anchor=W)
     pressureLabel.grid(row=8, column=0)
     pressureLabel.config(font=('Fixedsys', 15))
     pressureInfo = Label(h1, text="Measurement (in FSW) found on submarine")
     pressureInfo.grid(row=9, column=0)
     pressureInfo.config(font=('Fixedsys', 10))
+
     floodLabel = Label(h1, text="Percent Flooded:", anchor=W)
     floodLabel.grid(row=8, column=0)
     floodLabel.config(font=('Fixedsys', 15))
     floodInfo = Label(h1, text="Percentage of the compartment that is flooded, measurement found on submarine")
     floodInfo.grid(row=9, column=0)
     floodInfo.config(font=('Fixedsys', 10))
+
     tempLabel = Label(h1, text="Temperature:", anchor=W)
     tempLabel.grid(row=10, column=0)
     tempLabel.config(font=('Fixedsys', 15))
     tempInfo = Label(h1, text="Measurement (in Fahrenheit) found on submarine")
     tempInfo.grid(row=11, column=0)
     tempInfo.config(font=('Fixedsys', 10))
+
     concLabel = Label(h1, text="Oxygen and Carbon Dioxide Concentration:", anchor=W)
     concLabel.grid(row=12, column=0)
     concLabel.config(font=('Fixedsys', 15))
     concInfo = Label(h1, text="Measurements (in %SEV) found on submarine")
     concInfo.grid(row=13, column=0)
     concInfo.config(font=('Fixedsys', 10))
+
     eabLabel = Label(h1, text="Survivors with EABs:", anchor=W)
     eabLabel.grid(row=14, column=0)
     eabLabel.config(font=('Fixedsys', 15))
-    eabInfo = Label(h1, text="Sailors who are wearing EABs")
+    eabInfo = Label(h1, text="Number of sailors who are wearing EABs")
     eabInfo.grid(row=15, column=0)
     eabInfo.config(font=('Fixedsys', 10))
+
+    instructionLabel = Label(h2, text="Instructions:")
+    instructionLabel.grid(row=0, column=0)
+    instructionLabel.config(font=('Fixedsys', 20))
+    instr = "-Input atmospheric data found on the submarine in the corresponding slots.\n-Press enter to calculate the survival and start escape times.\n-The shortest start escape time is the true time to start escape.\n-Press plot data to record and graph the atmospheric data.\n-Oxygen, carbon dioxide, and pressure data will be plotted and recorded in\n the 'Data' Tab. Data points can be deleted in the same 'Data' tab.\n-The 'Graph' tab has plots of atmospheric data."
+    instructions = Label(h2, text=instr)
+    instructions.grid(row=1, column=0)
+    instructions.config(font=('Fixedsys', 15))
+
 
 def plotClick():
     global counter
