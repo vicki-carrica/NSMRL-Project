@@ -28,3 +28,10 @@ Contact: vickicarrica@yahoo.com
   - Download the latest version of Python at https://www.python.org/downloads/ 
   - Follow instructions on the executable
   - Add Python to an IDE (we used Visual Studio: see instructions at https://code.visualstudio.com/docs/python/python-tutorial)
+
+*Matplotlib*
+```
+$ python -m pip install -U pip
+python -m pip install -U matplotlib
+```
+  - For more information, see https://matplotlib.org/stable/users/installing/index.html
