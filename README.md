@@ -10,7 +10,7 @@ Builder
 </br>
 Contact: roal1878@gmail.com
 
-</br>
+
 **Vicki Carrica**
 </br>
 **Old Saybrook High School, Class of 2023**
