@@ -19,3 +19,12 @@ Contact: roal1878@gmail.com
 Programmer
 </br>
 Contact: vickicarrica@yahoo.com
+
+## Getting Started
+
+### Installations
+
+*Python 3
+  - Download the latest version of Python at https://www.python.org/downloads/ 
+  - Follow instructions on the executable
+  - Add Python to an IDE (we used Visual Studio: see instructions at https://code.visualstudio.com/docs/python/python-tutorial)
