@@ -4,6 +4,7 @@ This GitHub repository contains the source code that was used to create a Start 
 </br>
 ### About Us
 **Ronan Allison**
+</br>
 **Ledyard High School, Class of 2023**
 </br>
 Builder
