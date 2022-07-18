@@ -24,7 +24,7 @@ Contact: vickicarrica@yahoo.com
 
 ### Installations
 
-*Python 3
+*Python 3*
   - Download the latest version of Python at https://www.python.org/downloads/ 
   - Follow instructions on the executable
   - Add Python to an IDE (we used Visual Studio: see instructions at https://code.visualstudio.com/docs/python/python-tutorial)
