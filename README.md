@@ -16,6 +16,5 @@ Contact: roal1878@gmail.com
 **Old Saybrook High School, Class of 2023**
 </br>
 Programmer
-
-
-
+</br>
+Contact: vickicarrica@yahoo.com
