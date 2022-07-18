@@ -4,7 +4,7 @@ This GitHub repository contains the source code that was used to create a Start 
 **Ronan Allison**
 **Ledyard High School, Class of 2023**
 Builder
-Contact: [roal1878@gmail.com]
+Contact: roal1878@gmail.com
 
 </br?
 **Vicki Carrica**
