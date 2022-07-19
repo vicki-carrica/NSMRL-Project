@@ -1,9 +1,11 @@
-#Vicki Carrica, Naval Submarine Medical Research Lab, 2022
+# Vicki Carrica and Ronan Allison, Naval Submarine Medical Research Lab, 2022
 
-#This is the python file that creates the Graphic User Interface (GUI) for the SET Calculator, a calculation device that calculates start escape time and visualizes
-#Trends in atmospheric data. For more information, refer to the README on the NSMRL-Project Github repository owned by vicki-carrica ().
+# This is the python file that creates the Graphic User Interface (GUI) for the SET Calculator, a calculation device that calculates start escape time and visualizes
+# Trends in atmospheric data. For more information, refer to the README on the NSMRL-Project Github repository owned by vicki-carrica ().
 
-#Contact: vickicarrica@yahoo.com
+# Contact: 
+# vickicarrica@yahoo.com
+# roal1878@gmail.com
 
 
 import math
@@ -22,6 +24,8 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import time
 matplotlib.use("TkAgg")
+
+
 
 #creates a window with a 800 by 480 resolution to match calculator screen resolution: may vary depending on calculator screen size
 root = Tk()
@@ -192,12 +196,14 @@ start = time.time()
 #counter variables to count the number of times buttons are pressed
 counter = 0
 count = 0
+undoCount = -1
 
 #variables that store the value of previous data points when delete is hit (to be able to undo the action)
-storeT = int
-storeO = int
-storeCO = int
-storeP = int
+storeT = []
+storeO = []
+storeCO = []
+storeP = []
+storeIndex = []
 
 
 #Label and enter box for the variables on the input frame
@@ -589,10 +595,24 @@ def deleteClick():
 
     #This counter is used to account for the difference in index after item(s) are deleted 
     global count
+    global storeIndex
+    global storeO
+    global storeCO
+    global storeP
+    global storeT
+    global undoButt
+    global undoCount
     try:
         #returns the integer of the selected row in the Treeview
         selected_item = int(data.selection()[0])-count
         print(selected_item)
+
+        #Stores the value from the deletion 
+        storeO.append(oxY[int(selected_item)])
+        storeCO.append(coY[int(selected_item)])
+        storeP.append(pY[int(selected_item)])
+        storeT.append(oxX[int(selected_item)])
+        storeIndex.append(selected_item)
 
         #Deletes index from x and y arrays
         del oxY[int(selected_item)]
@@ -623,14 +643,61 @@ def deleteClick():
         undoButt.config(bg="white", fg="purple")
 
         count = count+1
+        undoCount = undoCount+1
         
     #Checks for no selected row and displays a warning message in that case
     except IndexError:
         messagebox.showwarning("INDEX ERROR","No data selected")
 
 def undoClick():
-    #ADD COMMENT
-    print("hi")
+    #This function undos a deletion on the spreadsheet and graph 
+    global storeIndex
+    global storeO
+    global storeCO
+    global storeP
+    global storeT
+    global undoCount
+    global undoButt
+    try:
+        print("hi this is count", count)
+        ind = storeIndex[undoCount]
+        print("index: ", ind)
+        print("time: ", storeT[undoCount])
+        print("oxygen: ", storeO[undoCount])
+        print("carbon dioxide: ", storeCO[undoCount])
+        print("pressure: ", storeP[undoCount])
+        tr = math.floor(storeT[undoCount])
+        data.insert(parent='', index=ind, iid=(ind), values=(tr, storeO[undoCount], storeCO[undoCount], storeP[undoCount]))
+        oxY.insert(ind, storeO[undoCount])
+        coY.insert(ind, storeCO[undoCount])
+        pY.insert(ind, storeP[undoCount])
+        oxX.insert(ind, storeT[undoCount])
+        coX.insert(ind, storeT[undoCount])
+        pX.insert(ind, storeT[undoCount])
+        del storeT[undoCount]
+        del storeO[undoCount]
+        del storeCO[undoCount]
+        del storeP[undoCount]
+        del storeIndex[undoCount]
+
+        #clears previous plots
+        o.cla()
+        c.cla()
+        p.cla()
+
+        #plots the graphs with the modified arrays
+        o.plot(oxX, oxY, marker='o', color='darkblue')
+        c.plot(coX, coY, marker='o', color='darkblue')
+        p.plot(pX, pY, marker='o', color='darkblue')
+        o.set_ylim([13, 25])
+        c.set_ylim([0, 6])
+        p.set_ylim([0, 25])
+        undoCount=undoCount-1
+        if undoCount<0:
+            undoButt.config(bg='lightgrey', fg="darkgrey")
+    except IndexError:
+        messagebox.showwarning("INDEX ERROR","Cannot Undo")
+
 
 
 #Declares "Enter" button
