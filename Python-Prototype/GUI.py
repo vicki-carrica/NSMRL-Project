@@ -585,10 +585,16 @@ def plotClick():
     coX.append(t)
     pX.append(t)
 
+    #Creates the line of best fit 
+    #Will plot the line of best fit only if there is more than one point
     if (counter > 1):
+        #Gets the slope and intercept of the line of best fit
         oa, ob = np.polyfit(oxX, oxY, 1)
+        print(oa)
+        #Creates new arrays to plot the line of best fit
         newoY = []
         newoX = []
+        #Creates the line of best fit that extends until it hits critical levels of oxygen (13%)
         for x in range(0, 1000):
             newy = oa*x + ob
             if (newy<13):
@@ -597,18 +603,24 @@ def plotClick():
                 break
             newoX.append(x)
             newoY.append(newy)
+        #clears previous plot
         o.cla()
+        #Scatters points of actual data 
         o.scatter(oxX, oxY, color='darkblue')
+        #Plots line of best fit 
         o.plot(newoX, newoY)
+        #Adds titles
         o.set_title("Oxygen Readings", fontname="Serif")
         o.set_xlabel("Time (seconds)", fontname="Serif")
         o.set_ylabel("Oxygen Concentration (%SEV)", fontname="Serif")
 
+        #Creates line of best fit for carbon dioxide with same process as oxygen
         coa, cob = np.polyfit(coX, coY, 1)
         newcoY = []
         newcoX = []
         for x in range(0, 1000):
             newy = coa*x + cob
+            #critical level is 6%
             if (newy>6):
                 newcoX.append(x)
                 newcoY.append(newy)
@@ -622,11 +634,14 @@ def plotClick():
         c.set_xlabel("Time (seconds)", fontname="Serif")
         c.set_ylabel("Carbon Dioxide Concentration (%SEV)", fontname="Serif")
 
+
+        #Creates line of best fit for pressure with same process as oxygen
         pa, pb = np.polyfit(pX, pY, 1)
         newpY = []
         newpX = []
         for x in range(0, 1000):
             newy = pa*x + pb
+            #critical level is 23 fsw 
             if (newy>23):
                 newpX.append(x)
                 newpY.append(newy)
@@ -641,7 +656,6 @@ def plotClick():
         p.set_ylabel("Pressure (fsw)", fontname="Serif")
 
     #Plots the x (time) and y (data) arrays with points at the data points (o marker) and a dark blue curve color
-    #o.plot(oxX, oxY, marker='o', color='darkblue')
     o.scatter(oxX, oxY, color='darkblue')
     c.scatter(coX, coY, color='darkblue')
     p.scatter(pX, pY, color='darkblue')
@@ -662,6 +676,7 @@ def deleteClick():
     global storeCO
     global storeP
     global storeT
+    global counter
     global undoButt
     global undoCount
     try:
@@ -688,25 +703,85 @@ def deleteClick():
         #Deletes the selected row from the Treeview spreadsheet
         data.delete((selected_item+count))
 
-        #clears previous plots
-        o.cla()
-        c.cla()
-        p.cla()
+        if (counter > 1):
+            #Gets the slope and intercept of the line of best fit
+            oa, ob = np.polyfit(oxX, oxY, 1)
+            print(oa)
+            #Creates new arrays to plot the line of best fit
+            newoY = []
+            newoX = []
+            #Creates the line of best fit that extends until it hits critical levels of oxygen (13%)
+            for x in range(0, 1000):
+                newy = oa*x + ob
+                if (newy<13):
+                    newoX.append(x)
+                    newoY.append(newy)
+                    break
+                newoX.append(x)
+                newoY.append(newy)
+            #clears previous plot
+            o.cla()
+            #Scatters points of actual data 
+            o.scatter(oxX, oxY, color='darkblue')
+            #Plots line of best fit 
+            o.plot(newoX, newoY)
+            #Adds titles
+            o.set_title("Oxygen Readings", fontname="Serif")
+            o.set_xlabel("Time (seconds)", fontname="Serif")
+            o.set_ylabel("Oxygen Concentration (%SEV)", fontname="Serif")
 
-        #plots the graphs with the modified arrays
-        o.plot(oxX, oxY, marker='o', color='darkblue')
-        c.plot(coX, coY, marker='o', color='darkblue')
-        p.plot(pX, pY, marker='o', color='darkblue')
-        o.set_ylim([13, 25])
-        c.set_ylim([0, 6])
-        p.set_ylim([0, 25])
+            #Creates line of best fit for carbon dioxide with same process as oxygen
+            coa, cob = np.polyfit(coX, coY, 1)
+            newcoY = []
+            newcoX = []
+            for x in range(0, 1000):
+                newy = coa*x + cob
+                #critical level is 6%
+                if (newy>6):
+                    newcoX.append(x)
+                    newcoY.append(newy)
+                    break
+                newcoX.append(x)
+                newcoY.append(newy)
+            c.cla()
+            c.scatter(coX, coY, color='darkblue')
+            c.plot(newcoX, newcoY)
+            c.set_title("Carbon Dioxide Readings", fontname="Serif")
+            c.set_xlabel("Time (seconds)", fontname="Serif")
+            c.set_ylabel("Carbon Dioxide Concentration (%SEV)", fontname="Serif")
+
+
+            #Creates line of best fit for pressure with same process as oxygen
+            pa, pb = np.polyfit(pX, pY, 1)
+            newpY = []
+            newpX = []
+            for x in range(0, 1000):
+                newy = pa*x + pb
+                #critical level is 23 fsw 
+                if (newy>23):
+                    newpX.append(x)
+                    newpY.append(newy)
+                    break
+                newpX.append(x)
+                newpY.append(newy)
+            p.cla()
+            p.scatter(pX, pY, color='darkblue')
+            p.plot(newpX, newpY)
+            p.set_title("Pressure Readings", fontname="Serif")
+            p.set_xlabel("Time (seconds)", fontname="Serif")
+            p.set_ylabel("Pressure (fsw)", fontname="Serif")
+
+        #Plots the x (time) and y (data) arrays with points at the data points (o marker) and a dark blue curve color
+        o.scatter(oxX, oxY, color='darkblue')
+        c.scatter(coX, coY, color='darkblue')
+        p.scatter(pX, pY, color='darkblue')
 
         #Changes the colors of the undo button so that it activates after a row has been deleted
         undoButt.config(bg="white", fg="purple")
 
         count = count+1
         undoCount = undoCount+1
-        
+
     #Checks for no selected row and displays a warning message in that case
     except IndexError:
         messagebox.showwarning("INDEX ERROR","No data selected")
@@ -721,7 +796,10 @@ def undoClick():
     global count
     global undoCount
     global undoButt
+    #Ensures that there is something to undo 
     try:
+        
+        #Print statements serve for debugging 
         print("hi this is count", count)
         ind = storeIndex[undoCount]
         print("index: ", ind)
@@ -729,14 +807,21 @@ def undoClick():
         print("oxygen: ", storeO[undoCount])
         print("carbon dioxide: ", storeCO[undoCount])
         print("pressure: ", storeP[undoCount])
-        tr = math.floor(storeT[undoCount])
+        
+        tr = math.floor(storeT[undoCount]) #Time rounded
+
+        #Inserts stored values back into the spreadsheet
         data.insert(parent='', index=ind, iid=(ind), values=(tr, storeO[undoCount], storeCO[undoCount], storeP[undoCount]))
+
+        #Inserts the stored values into the graphed x and y arrays
         oxY.insert(ind, storeO[undoCount])
         coY.insert(ind, storeCO[undoCount])
         pY.insert(ind, storeP[undoCount])
         oxX.insert(ind, storeT[undoCount])
         coX.insert(ind, storeT[undoCount])
         pX.insert(ind, storeT[undoCount])
+
+        #Deletes the values from the stored values after they are added back into the arrays and spreadsheet
         del storeT[undoCount]
         del storeO[undoCount]
         del storeCO[undoCount]
@@ -755,8 +840,12 @@ def undoClick():
         o.set_ylim([13, 25])
         c.set_ylim([0, 6])
         p.set_ylim([0, 25])
+
+        #Modifies counters to take into account the addition of the value into the graph/spreadsheet
         undoCount=undoCount-1
         count = count-1
+
+        #Sets the color back to grey if no more values can be undoed
         if undoCount<0:
             undoButt.config(bg='lightgrey', fg="darkgrey")
     except IndexError:
