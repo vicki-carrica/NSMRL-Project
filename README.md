@@ -20,6 +20,16 @@ Programmer
 </br>
 Contact: vickicarrica@yahoo.com
 
+### The Problem
+Start Escape Time (SET) is the latest possible time that sailors on a DISSUB can commence escape. Sailors would rather be rescued than be forced to escape to a method of calculating SET is critical in these cases.
+</br>
+The current method is the Guard Book, a lengthy book that includes many steps and complicated equations and tables. The Guard Book is prone to human error and does not have high accuracy. This project was designed to better the method of the Guard Book and create a calculation device that has fewer steps, is less prone to human error, and is quicker.
+</br>
+Previous interns have created physical calculation devices, but they did not encompass all aspects of SET and were still confusing and prone to human error. 
+
+### Our Solution 
+To combat the current issues SET calculation, we created an electronic calculation device that takes inputs from sailors of atmospheric data found on the submarine and automatically calculates SET and survival times. It also plots the data and formats them onto a spreadsheet. 
+
 ### Prototypes
 This repository contains the source code for both the Java and Python prototypes we developed throughout the project. The Python prototype is far more advanced than the Java prototype and is the most updated version of the calculator. Python was chosen over Java because of the ease to develop Graphical User Interface (GUI) while maintaining the accuracy of the math. 
 
