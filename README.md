@@ -20,6 +20,22 @@ Programmer
 </br>
 Contact: vickicarrica@yahoo.com
 
+### Prototypes
+This repository contains the source code for both the Java and Python prototypes we developed throughout the project. The Python prototype is far more advanced than the Java prototype and is the most updated version of the calculator. Python was chosen over Java because of the ease to develop Graphical User Interface (GUI) while maintaining the accuracy of the math. 
+
+### Files
+*GUI.py*
+</br>
+This file contains all of the code for the Graphical User Interface and is file that was ultimately used in the calculator. 
+</br>
+*SETCalculator.py*
+</br>
+This file contains the calculations for survival time, start escape time, and other formulas found on the Guard Book spreadsheet (contact us for a copy). 
+</br>
+*Java files*
+</br>
+These files have the same function as the Python files but are less developed and are written in Java instead.
+
 ## Getting Started
 
 ### Installations
@@ -43,3 +59,4 @@ pip install numpy
 ```
   - For more information, see https://numpy.org/install/
  
+ ## Features
