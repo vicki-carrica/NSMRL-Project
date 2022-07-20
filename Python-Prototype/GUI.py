@@ -23,6 +23,7 @@ except ImportError:
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import time
+import numpy as np
 matplotlib.use("TkAgg")
 
 
@@ -204,6 +205,11 @@ storeO = []
 storeCO = []
 storeP = []
 storeIndex = []
+
+#Variables for battery
+HOST = "127.0.0.1"
+PORT = 8423
+
 
 
 #Label and enter box for the variables on the input frame
@@ -579,10 +585,66 @@ def plotClick():
     coX.append(t)
     pX.append(t)
 
+    if (counter > 1):
+        oa, ob = np.polyfit(oxX, oxY, 1)
+        newoY = []
+        newoX = []
+        for x in range(0, 1000):
+            newy = oa*x + ob
+            if (newy<13):
+                newoX.append(x)
+                newoY.append(newy)
+                break
+            newoX.append(x)
+            newoY.append(newy)
+        o.cla()
+        o.scatter(oxX, oxY, color='darkblue')
+        o.plot(newoX, newoY)
+        o.set_title("Oxygen Readings", fontname="Serif")
+        o.set_xlabel("Time (seconds)", fontname="Serif")
+        o.set_ylabel("Oxygen Concentration (%SEV)", fontname="Serif")
+
+        coa, cob = np.polyfit(coX, coY, 1)
+        newcoY = []
+        newcoX = []
+        for x in range(0, 1000):
+            newy = coa*x + cob
+            if (newy>6):
+                newcoX.append(x)
+                newcoY.append(newy)
+                break
+            newcoX.append(x)
+            newcoY.append(newy)
+        c.cla()
+        c.scatter(coX, coY, color='darkblue')
+        c.plot(newcoX, newcoY)
+        c.set_title("Carbon Dioxide Readings", fontname="Serif")
+        c.set_xlabel("Time (seconds)", fontname="Serif")
+        c.set_ylabel("Carbon Dioxide Concentration (%SEV)", fontname="Serif")
+
+        pa, pb = np.polyfit(pX, pY, 1)
+        newpY = []
+        newpX = []
+        for x in range(0, 1000):
+            newy = pa*x + pb
+            if (newy>23):
+                newpX.append(x)
+                newpY.append(newy)
+                break
+            newpX.append(x)
+            newpY.append(newy)
+        p.cla()
+        p.scatter(pX, pY, color='darkblue')
+        p.plot(newpX, newpY)
+        p.set_title("Pressure Readings", fontname="Serif")
+        p.set_xlabel("Time (seconds)", fontname="Serif")
+        p.set_ylabel("Pressure (fsw)", fontname="Serif")
+
     #Plots the x (time) and y (data) arrays with points at the data points (o marker) and a dark blue curve color
-    o.plot(oxX, oxY, marker='o', color='darkblue')
-    c.plot(coX, coY, marker='o', color='darkblue')
-    p.plot(pX, pY, marker='o', color='darkblue')
+    #o.plot(oxX, oxY, marker='o', color='darkblue')
+    o.scatter(oxX, oxY, color='darkblue')
+    c.scatter(coX, coY, color='darkblue')
+    p.scatter(pX, pY, color='darkblue')
 
     #rounds down the seconds to a whole number:
     ti = math.floor(t)
@@ -656,6 +718,7 @@ def undoClick():
     global storeCO
     global storeP
     global storeT
+    global count
     global undoCount
     global undoButt
     try:
@@ -693,6 +756,7 @@ def undoClick():
         c.set_ylim([0, 6])
         p.set_ylim([0, 25])
         undoCount=undoCount-1
+        count = count-1
         if undoCount<0:
             undoButt.config(bg='lightgrey', fg="darkgrey")
     except IndexError:
