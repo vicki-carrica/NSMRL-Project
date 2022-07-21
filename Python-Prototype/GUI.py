@@ -594,6 +594,9 @@ def plotClick():
         #Creates new arrays to plot the line of best fit
         newoY = []
         newoX = []
+
+
+
         #Creates the line of best fit that extends until it hits critical levels of oxygen (13%)
         for x in range(0, 1000):
             newy = oa*x + ob
@@ -609,6 +612,12 @@ def plotClick():
         o.scatter(oxX, oxY, color='darkblue')
         #Plots line of best fit 
         o.plot(newoX, newoY)
+        #Adds time label
+        setox = (13-ob)/oa
+        setoxtext="Time:\n" + str(math.floor(setox))
+        o.scatter(setox, 13, color='red')
+        o.text(setox, 13, setoxtext, ha='right', va='top', fontname="Serif")
+        o.set_ylim([11, 25])
         #Adds titles
         o.set_title("Oxygen Readings", fontname="Serif")
         o.set_xlabel("Time (seconds)", fontname="Serif")
@@ -630,6 +639,11 @@ def plotClick():
         c.cla()
         c.scatter(coX, coY, color='darkblue')
         c.plot(newcoX, newcoY)
+        setcox = (6-cob)/coa
+        setcoxtext="Time:\n" + str(math.floor(setcox))
+        c.scatter(setcox, 6, color='red')
+        c.text(setcox, 6, setcoxtext, ha='left', va='top', fontname="Serif")
+        c.set_ylim([0, 7])
         c.set_title("Carbon Dioxide Readings", fontname="Serif")
         c.set_xlabel("Time (seconds)", fontname="Serif")
         c.set_ylabel("Carbon Dioxide Concentration (%SEV)", fontname="Serif")
@@ -651,6 +665,11 @@ def plotClick():
         p.cla()
         p.scatter(pX, pY, color='darkblue')
         p.plot(newpX, newpY)
+        setpx = (23-pb)/pa
+        setpxtext="Time:\n" + str(math.floor(setpx))
+        p.scatter(setpx, 23, color='red')
+        p.text(setpx, 23, setpxtext, ha='left', va='top', fontname="Serif")
+        p.set_ylim([0, 25])
         p.set_title("Pressure Readings", fontname="Serif")
         p.set_xlabel("Time (seconds)", fontname="Serif")
         p.set_ylabel("Pressure (fsw)", fontname="Serif")
@@ -725,6 +744,12 @@ def deleteClick():
             o.scatter(oxX, oxY, color='darkblue')
             #Plots line of best fit 
             o.plot(newoX, newoY)
+
+            setox = (13-ob)/oa
+            setoxtext="Time:\n" + str(math.floor(setox))
+            o.scatter(setox, 13, color='red')
+            o.text(setox, 13, setoxtext, ha='left', va='top', fontname="Serif")
+            o.set_ylim([11, 25])
             #Adds titles
             o.set_title("Oxygen Readings", fontname="Serif")
             o.set_xlabel("Time (seconds)", fontname="Serif")
@@ -746,6 +771,11 @@ def deleteClick():
             c.cla()
             c.scatter(coX, coY, color='darkblue')
             c.plot(newcoX, newcoY)
+            setcox = (6-cob)/coa
+            setcoxtext="Time:\n" + str(math.floor(setcox))
+            c.scatter(setcox, 6, color='red')
+            c.text(setcox, 6, setcoxtext, ha='left', va='top', fontname="Serif")
+            c.set_ylim([0, 7])
             c.set_title("Carbon Dioxide Readings", fontname="Serif")
             c.set_xlabel("Time (seconds)", fontname="Serif")
             c.set_ylabel("Carbon Dioxide Concentration (%SEV)", fontname="Serif")
@@ -767,6 +797,11 @@ def deleteClick():
             p.cla()
             p.scatter(pX, pY, color='darkblue')
             p.plot(newpX, newpY)
+            setpx = (23-pb)/pa
+            setpxtext="Time:\n" + str(math.floor(setpx))
+            p.scatter(setpx, 23, color='red')
+            p.text(setpx, 23, setpxtext, ha='left', va='top', fontname="Serif")
+            p.set_ylim([0, 25])
             p.set_title("Pressure Readings", fontname="Serif")
             p.set_xlabel("Time (seconds)", fontname="Serif")
             p.set_ylabel("Pressure (fsw)", fontname="Serif")
@@ -834,12 +869,99 @@ def undoClick():
         p.cla()
 
         #plots the graphs with the modified arrays
-        o.plot(oxX, oxY, marker='o', color='darkblue')
-        c.plot(coX, coY, marker='o', color='darkblue')
-        p.plot(pX, pY, marker='o', color='darkblue')
-        o.set_ylim([13, 25])
-        c.set_ylim([0, 6])
-        p.set_ylim([0, 25])
+        if (counter > 1):
+            #Gets the slope and intercept of the line of best fit
+            oa, ob = np.polyfit(oxX, oxY, 1)
+            print(oa)
+            #Creates new arrays to plot the line of best fit
+            newoY = []
+            newoX = []
+
+            #Creates the line of best fit that extends until it hits critical levels of oxygen (13%)
+            for x in range(0, 1000):
+                newy = oa*x + ob
+                setox = (13-ob)/oa
+                setotext = "Time: " + str(setox)
+                print(setotext)
+                o.text(setox, 13, setotext)
+                if (newy<13):
+                    newoX.append(x)
+                    newoY.append(newy)
+                    break
+                newoX.append(x)
+                newoY.append(newy)
+            #clears previous plot
+            o.cla()
+            #Scatters points of actual data 
+            o.scatter(oxX, oxY, color='darkblue')
+            #Plots line of best fit 
+            o.plot(newoX, newoY)
+
+            setox = (13-ob)/oa
+            setoxtext="Time:\n" + str(math.floor(setox))
+            o.scatter(setox, 13, color='red')
+            o.text(setox, 13, setoxtext, ha='left', va='top', fontname="Serif")
+            o.set_ylim([11, 25])
+            #Adds titles
+            o.set_title("Oxygen Readings", fontname="Serif")
+            o.set_xlabel("Time (seconds)", fontname="Serif")
+            o.set_ylabel("Oxygen Concentration (%SEV)", fontname="Serif")
+
+            #Creates line of best fit for carbon dioxide with same process as oxygen
+            coa, cob = np.polyfit(coX, coY, 1)
+            newcoY = []
+            newcoX = []
+            for x in range(0, 1000):
+                newy = coa*x + cob
+                #critical level is 6%
+                if (newy>6):
+                    newcoX.append(x)
+                    newcoY.append(newy)
+                    break
+                newcoX.append(x)
+                newcoY.append(newy)
+            c.cla()
+            c.scatter(coX, coY, color='darkblue')
+            c.plot(newcoX, newcoY)
+            setcox = (6-cob)/coa
+            setcoxtext="Time:\n" + str(math.floor(setcox))
+            c.scatter(setcox, 6, color='red')
+            c.text(setcox, 6, setcoxtext, ha='left', va='top', fontname="Serif")
+            c.set_ylim([0, 7])
+            c.set_title("Carbon Dioxide Readings", fontname="Serif")
+            c.set_xlabel("Time (seconds)", fontname="Serif")
+            c.set_ylabel("Carbon Dioxide Concentration (%SEV)", fontname="Serif")
+
+
+            #Creates line of best fit for pressure with same process as oxygen
+            pa, pb = np.polyfit(pX, pY, 1)
+            newpY = []
+            newpX = []
+            for x in range(0, 1000):
+                newy = pa*x + pb
+                #critical level is 23 fsw 
+                if (newy>23):
+                    newpX.append(x)
+                    newpY.append(newy)
+                    break
+                newpX.append(x)
+                newpY.append(newy)
+            p.cla()
+            p.scatter(pX, pY, color='darkblue')
+            p.plot(newpX, newpY)
+            setpx = (23-pb)/pa
+            setpxtext="Time:\n" + str(math.floor(setpx))
+            p.scatter(setpx, 23, color='red')
+            p.text(setpx, 23, setpxtext, ha='left', va='top', fontname="Serif")
+            p.set_ylim([0, 25])
+            p.set_title("Pressure Readings", fontname="Serif")
+            p.set_xlabel("Time (seconds)", fontname="Serif")
+            p.set_ylabel("Pressure (fsw)", fontname="Serif")
+
+        #Plots the x (time) and y (data) arrays with points at the data points (o marker) and a dark blue curve color
+        o.scatter(oxX, oxY, color='darkblue')
+        c.scatter(coX, coY, color='darkblue')
+        p.scatter(pX, pY, color='darkblue')
 
         #Modifies counters to take into account the addition of the value into the graph/spreadsheet
         undoCount=undoCount-1
