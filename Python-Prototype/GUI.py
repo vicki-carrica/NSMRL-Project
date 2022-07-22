@@ -210,7 +210,7 @@ def plotGraphs(oxX, oxY, coX, coY, pX, pY):
     #Creates loop to find the time to reach critical levels 
     while True:
         newy = oa*x + ob
-        roundeda = math.ceil(oa*1000)
+        roundeda = math.ceil(oa*1000)+1
         print("OXYGEN- x: " + str(x) + ", roundeda: " + str(roundeda) + ", newy: " + str(newy))
         #Checks if the line will not reach critical level with slope (i.e. positive slope when level is more negative)
         if ((roundeda>=0) and (x>100)):
@@ -293,7 +293,7 @@ def plotGraphs(oxX, oxY, coX, coY, pX, pY):
     #Creates loop to find the time to reach critical levels 
     while True:
         newy = pa*x + pb
-        roundeda = math.ceil(pa*1000)
+        roundeda = math.ceil(pa*1000)-1
         print("PRESSURE- x: " + str(x) + ", roundeda: " + str(roundeda) + ", newy: " + str(newy))
         #Checks if the line will not reach critical level with slope (i.e. positive slope when level is more negative)
         if ((roundeda<=0) and (x>100)):
