@@ -361,15 +361,15 @@ welcomeLabel.config(font=('Fixedsys',20), fg='darkblue')
 
 wl2 = Label(welcomeRoot, text="This calculator determines Start Escape Time (SET). SET is the latest possible\n time for fit survivors to commence escape in a Disabled Submarine (DISSUB).")
 wl2.grid(row=1, column=0, pady=10)
-wl2.config(font=('Fixedsys',15))
+wl2.config(font=('Fixedsys',10))
 
 wl3 = Label(welcomeRoot, text="This device features a SET calculator, spreadsheet, and graph to track, store,\nand predict atmospheric trends and data.")
 wl3.grid(row=2, column=0, pady=10)
-wl3.config(font=('Fixedsys',15))
+wl3.config(font=('Fixedsys',10))
 
 wl4 = Label(welcomeRoot, text="For additional information, refer to the 'Help' button.")
 wl4.grid(row=3, column=0, pady=10)
-wl4.config(font=('Fixedsys',15))
+wl4.config(font=('Fixedsys',10))
 
 welcomeButton = Button(welcomeRoot, text="Close", command=welcomeRoot.destroy)
 welcomeButton.config(font=('Fixedsys', 20), fg='darkblue')
@@ -458,30 +458,38 @@ eabsLabel = Label(frame1, text="Survivors with EABs: ")
 eabsLabel.grid(row=5, column=2)
 eabsLabel.config(font=('Fixedsys', 15))
 
+# The labels of survival time could be displayed, but because of spacing, we decided to omit them.
+# To add them, uncomment these lines (and change the grid position to fit into the screen)
+# 
 #Label that displays oxygen survival time 
-oSTLabel = Label(frame1, text=" ")
-oSTLabel.grid(row=7, column=0, columnspan=2)
-oSTLabel.config(font=('Fixedsys', 12))
+#oSTLabel = Label(frame1, text=" ")
+#oSTLabel.grid(row=7, column=0, columnspan=2)
+#oSTLabel.config(font=('Fixedsys', 12))
 
 #Label that displays carbon dioxide survival time
-coSTLabel = Label(frame1, text=" ")
-coSTLabel.config(font=('Fixedsys', 12))
-coSTLabel.grid(row=8, column=0, columnspan=2)
+#coSTLabel = Label(frame1, text=" ")
+#coSTLabel.config(font=('Fixedsys', 12))
+#coSTLabel.grid(row=8, column=0, columnspan=2)
 
 #Label that displays oxygen start escape time
 oSETLabel = Label(frame1, text=" ")
-oSETLabel.grid(row=9, column=0, columnspan=2)
+oSETLabel.grid(row=7, column=0, columnspan=2)
 oSETLabel.config(font=('Fixedsys', 12))
 
 #Label that displays carbon dioxide start escape time
 coSETLabel = Label(frame1, text=" ")
-coSETLabel.grid(row=7, column=2, columnspan=2)
+coSETLabel.grid(row=8, column=0, columnspan=2)
 coSETLabel.config(font=('Fixedsys', 12))
 
 #Label that displays pressure start escape time
 eabSETLabel = Label(frame1, text=" ")
-eabSETLabel.grid(row=8, column=2, columnspan=2, pady=10)
+eabSETLabel.grid(row=7, column=2, columnspan=2)
 eabSETLabel.config(font=('Fixedsys', 12))
+
+#Label that displays pressure start escape time
+SETLabel = Label(frame1, text=" ")
+SETLabel.grid(row=8, column=2, columnspan=2)
+SETLabel.config(font=('Fixedsys', 12))
 
 #Creates figures to place graphs on
 fO = Figure(figsize=(9,4.5), dpi=80) 
@@ -602,11 +610,16 @@ def enterClick():
         coSETDay = math.floor(coSET/24)
         coSETHr = math.floor(coSET-24*coSETDay)
 
-        #Displays the survival/start escape times onto the labels 
-        oSTLabel.config(text="Oxygen survival time:\n " + str(oSTDay) + " day " + str(oSTHr) + " hr")
-        coSTLabel.config(text="Carbon dioxide survival time:\n " + str(coSTDay) + " day " + str(coSTHr) + " hr")
+        #Displays the survival/start escape times onto the labels. ST was omitted to save space but can be added back by uncommenting lines
+        #oSTLabel.config(text="Oxygen survival time:\n " + str(oSTDay) + " day " + str(oSTHr) + " hr")
+        #coSTLabel.config(text="Carbon dioxide survival time:\n " + str(coSTDay) + " day " + str(coSTHr) + " hr")
         oSETLabel.config(text="Oxygen start escape time:\n " + str(oSETDay) + " day " + str(oSETHr) + " hr")
         coSETLabel.config(text="Carbon dioxide start escape time:\n " + str(coSETDay) + " day " + str(coSETHr) + " hr")
+
+        if (oSET< coSET):
+            SETLabel.config(text="START ESCAPE TIME:\n " + str(oSETDay) + " day " + str(oSETHr) + " hr")
+        else:
+            SETLabel.config(text="START ESCAPE TIME:\n " + str(coSETDay) + " day " + str(coSETHr) + " hr")
 
 
         #Checks if all survivors are wearing EABs. If not, the pressure start escape time is not calculated 
@@ -617,7 +630,9 @@ def enterClick():
             eabSETHr = math.floor(eabSET-24*eabSETDay)
 
             #Displays the start escape times onto the label 
-            eabSETLabel.config(text="EABs start escape time:\n " + str(eabSETDay) + " day " + str(eabSETHr) + " hr")
+            eabSETLabel.config(text="Pressure start escape time:\n " + str(eabSETDay) + " day " + str(eabSETHr) + " hr")
+            if (eabSET<oSET and eabSET<coSET):
+                SETLabel.config(text="START ESCAPE TIME:\n " + str(eabSETDay) + " day " + str(eabSETHr) + " hr")
         else:
             eabSET="NA"
             eabSETLabel.config(eabSETLabel.config(text="EABs start escape time:\n N/A"))
