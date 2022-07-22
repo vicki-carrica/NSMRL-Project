@@ -359,11 +359,11 @@ welcomeLabel = Label(welcomeRoot, text="Welcome to the SET Calculator!")
 welcomeLabel.grid(row=0, column=0)
 welcomeLabel.config(font=('Fixedsys',20), fg='darkblue')
 
-wl2 = Label(welcomeRoot, text="This calculator determines Start Escape Time (SET). SET is the latest\n possible time for fit survivors to commence escape in a Disabled\n Submarine (DISSUB).")
+wl2 = Label(welcomeRoot, text="This calculator determines Start Escape Time (SET). SET is the latest possible\ntime for fit survivors to commence escape in a Disabled Submarine (DISSUB).")
 wl2.grid(row=1, column=0, pady=10)
 wl2.config(font=('Fixedsys',13))
 
-wl3 = Label(welcomeRoot, text="This device features a SET calculator, spreadsheet, and graph to\n track, store, and predict atmospheric trends and data.")
+wl3 = Label(welcomeRoot, text="This device features a SET calculator, spreadsheet, and graph to track, store,\n and predict atmospheric trends and data.")
 wl3.grid(row=2, column=0, pady=10)
 wl3.config(font=('Fixedsys',13))
 
