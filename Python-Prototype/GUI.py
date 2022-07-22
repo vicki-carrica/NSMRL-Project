@@ -359,17 +359,17 @@ welcomeLabel = Label(welcomeRoot, text="Welcome to the SET Calculator!")
 welcomeLabel.grid(row=0, column=0)
 welcomeLabel.config(font=('Fixedsys',20), fg='darkblue')
 
-wl2 = Label(welcomeRoot, text="This calculator determines Start Escape Time (SET). SET is the latest possible\n time for fit survivors to commence escape in a Disabled Submarine (DISSUB).")
+wl2 = Label(welcomeRoot, text="This calculator determines Start Escape Time (SET). SET is the latest\n possible time for fit survivors to commence escape in a Disabled\n Submarine (DISSUB).")
 wl2.grid(row=1, column=0, pady=10)
-wl2.config(font=('Fixedsys',10))
+wl2.config(font=('Fixedsys',13))
 
-wl3 = Label(welcomeRoot, text="This device features a SET calculator, spreadsheet, and graph to track, store,\nand predict atmospheric trends and data.")
+wl3 = Label(welcomeRoot, text="This device features a SET calculator, spreadsheet, and graph to\n track, store, and predict atmospheric trends and data.")
 wl3.grid(row=2, column=0, pady=10)
-wl3.config(font=('Fixedsys',10))
+wl3.config(font=('Fixedsys',13))
 
 wl4 = Label(welcomeRoot, text="For additional information, refer to the 'Help' button.")
 wl4.grid(row=3, column=0, pady=10)
-wl4.config(font=('Fixedsys',10))
+wl4.config(font=('Fixedsys',13))
 
 welcomeButton = Button(welcomeRoot, text="Close", command=welcomeRoot.destroy)
 welcomeButton.config(font=('Fixedsys', 20), fg='darkblue')
@@ -613,8 +613,8 @@ def enterClick():
         #Displays the survival/start escape times onto the labels. ST was omitted to save space but can be added back by uncommenting lines
         #oSTLabel.config(text="Oxygen survival time:\n " + str(oSTDay) + " day " + str(oSTHr) + " hr")
         #coSTLabel.config(text="Carbon dioxide survival time:\n " + str(coSTDay) + " day " + str(coSTHr) + " hr")
-        oSETLabel.config(text="Oxygen start escape time:\n " + str(oSETDay) + " day " + str(oSETHr) + " hr")
-        coSETLabel.config(text="Carbon dioxide start escape time:\n " + str(coSETDay) + " day " + str(coSETHr) + " hr")
+        oSETLabel.config(text="O2 start escape time:\n " + str(oSETDay) + " day " + str(oSETHr) + " hr")
+        coSETLabel.config(text="CO2 start escape time:\n " + str(coSETDay) + " day " + str(coSETHr) + " hr")
 
         if (oSET< coSET):
             SETLabel.config(text="START ESCAPE TIME:\n " + str(oSETDay) + " day " + str(oSETHr) + " hr")
