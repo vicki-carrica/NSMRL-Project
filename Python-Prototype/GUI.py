@@ -28,18 +28,25 @@ matplotlib.use("TkAgg")
 
 
 
+#Creates welcome window
+welcomeRoot = Tk()
+welcomeRoot.title('Welcome')
+welcomeRoot.geometry('800x480')  
+
+
 #creates a window with a 800 by 480 resolution to match calculator screen resolution: may vary depending on calculator screen size
 root = Tk()
-root.title('GUI')
+root.title('SET Calculator')
 root.geometry('800x480')
 width = root.winfo_screenwidth()
 height = root.winfo_screenheight()
 
 #styles tkinter ttk attributes with the same font as the rest of the code
-s = ttk.Style()
+s = ttk.Style(master=root)
 s.configure('TNotebook.Tab', font=('Fixedsys','15'))
 s.configure('Treeview', font=('Fixedsys','10'))
 s.configure('Treeview.Heading', font=('Fixedsys','15'))
+
 
 #creates the main notebook for "Input" (main screen where data is entered), "Graph", and "Data" (spreadsheet that tracks inputs) tabs.
 notebook = ttk.Notebook(root)
@@ -345,6 +352,28 @@ storeIndex = []
 HOST = "127.0.0.1"
 PORT = 8423
 
+
+#Style welcome window
+
+welcomeLabel = Label(welcomeRoot, text="Welcome to the SET Calculator!")
+welcomeLabel.grid(row=0, column=0)
+welcomeLabel.config(font=('Fixedsys',20), fg='darkblue')
+
+wl2 = Label(welcomeRoot, text="This calculator determines Start Escape Time (SET). SET is the latest possible\n time for fit survivors to commence escape in a Disabled Submarine (DISSUB).")
+wl2.grid(row=1, column=0, pady=10)
+wl2.config(font=('Fixedsys',15))
+
+wl3 = Label(welcomeRoot, text="This device features a SET calculator, spreadsheet, and graph to track, store,\nand predict atmospheric trends and data.")
+wl3.grid(row=2, column=0, pady=10)
+wl3.config(font=('Fixedsys',15))
+
+wl4 = Label(welcomeRoot, text="For additional information, refer to the 'Help' button.")
+wl4.grid(row=3, column=0, pady=10)
+wl4.config(font=('Fixedsys',15))
+
+welcomeButton = Button(welcomeRoot, text="Close", command=welcomeRoot.destroy)
+welcomeButton.config(font=('Fixedsys', 20), fg='darkblue')
+welcomeButton.grid(column=0, row=4, pady=20)
 
 
 #Label and enter box for the variables on the input frame
@@ -686,7 +715,7 @@ def helpClick():
     eabInfo.config(font=('Fixedsys', 10))
 
     #Instructions (on the second tab):
-    instructionLabel = Label(h2, text="Instructions:")
+    instructionLabel = Label(h2, text="Instructions:", fg='darkblue')
     instructionLabel.grid(row=0, column=0)
     instructionLabel.config(font=('Fixedsys', 20))
     #String that contains instructions:
@@ -772,7 +801,7 @@ def deleteClick():
             plotGraphs(oxX, oxY, coX, coY, pX, pY)
 
         #Changes the colors of the undo button so that it activates after a row has been deleted
-        undoButt.config(bg="white", fg="purple")
+        undoButt.config(bg="white", fg="darkblue")
 
         count = count+1
         undoCount = undoCount+1
@@ -845,22 +874,22 @@ def undoClick():
 
 
 #Declares "Enter" button
-enterButt = Button(frame1, text="Enter", fg="purple", command=enterClick, padx=20, pady=10)
+enterButt = Button(frame1, text="Enter", fg="darkblue", command=enterClick, padx=20, pady=10)
 enterButt.grid(row=6, column=1, pady=10)
 enterButt.config(font=('Fixedsys', 10), bg='white')
 
 #Declares "Plot Data" button
-plotDataButt = Button(frame1, text="Plot Data", fg="purple", command = plotClick, padx=20, pady=10)
+plotDataButt = Button(frame1, text="Plot Data", fg="darkblue", command = plotClick, padx=20, pady=10)
 plotDataButt.grid(row=6, column=3)
 plotDataButt.config(font=('Fixedsys', 10), bg='white')
 
 #Declares "Help" button
-helpButt = Button(frame1, text="Help", fg="purple", command=helpClick, padx=20, pady=10)
+helpButt = Button(frame1, text="Help", fg="darkblue", command=helpClick, padx=20, pady=10)
 helpButt.grid(row=1, column=5, padx=10, pady=10)
 helpButt.config(font=('Fixedsys', 10), bg='white')
 
 #Declares "Delete" button
-deleteButt = Button(frame3, text="Delete", fg="purple", command= deleteClick, padx =10, pady=10)
+deleteButt = Button(frame3, text="Delete", fg="darkblue", command= deleteClick, padx =10, pady=10)
 deleteButt.config(font=('Fixedsys', 10), bg='white')
 deleteButt.grid(column=1, row=1)
 
