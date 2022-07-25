@@ -8,12 +8,14 @@
 # roal1878@gmail.com
 
 
+from contextvars import copy_context
 import math
 from multiprocessing import context
 import tkinter as tk
 from tkinter import *
 from tkinter import messagebox
 from tkinter import ttk
+from turtle import goto
 import matplotlib.pyplot as plt
 import matplotlib
 try:
@@ -570,75 +572,144 @@ def enterClick():
 
     #Attemps to collect the numbers from each of the enter boxes. 
     try:
-        #Declares the inputs as variables and casts them as ints/floats for calculations
-        fitSurv = int(fitEnter.get())
-        unfitSurv = int(unfitEnter.get())
-        candles = int(candEnter.get())
-        canisters = int(caniEnter.get())
-        pressure = float(pressEnter.get())
-        flood = int(floodEnter.get())
-        temp = float(tempEnter.get())
-        oConc = float(oxEnter.get())
-        coConc = float(coEnter.get())
-        eabs = int(eabsEnter.get())
+        while True:
+            #Declares the inputs as variables and casts them as ints/floats for calculations
+            fitSurv = int(fitEnter.get())
+            unfitSurv = int(unfitEnter.get())
+            candles = int(candEnter.get())
+            canisters = int(caniEnter.get())
+            pressure = float(pressEnter.get())
+            flood = int(floodEnter.get())
+            temp = float(tempEnter.get())
+            oConc = float(oxEnter.get())
+            coConc = float(coEnter.get())
+            eabs = int(eabsEnter.get())
+            
+            #To track whether the inputs are valid
+            warnText = ""
+            validInputs = True
 
-        oSurvTime = oxSurvTime(fitSurv, unfitSurv, candles, flood, oConc, temp) #stores the oxygen survival time
-        #Converts hours (decimal) to days (whole number) and hours (whole number) 
-        oSTDay = math.floor(oSurvTime/24)
-        oSTHr = math.floor(oSurvTime-24*oSTDay)
-        
-        coST = coSurvTime(fitSurv, unfitSurv, canisters, flood, coConc, temp) #stores the carbon dioxide survival time
-        #Converts hours (decimal) to days (whole number) and hours (whole number) 
-        coSTDay = math.floor(coST/24)
-        coSTHr = math.floor(coST-24*coSTDay)
+            #sets the conditions for invalid inputs 
+            if (fitSurv<=0):
+                warnText += "-The number of fit survivors must be greater than 0"
+                validInputs= False
+            
+            if (unfitSurv<0):
+                warnText += "\n-The number of unfit survivors must be greater than\n or equal to 0"
+                validInputs= False
+            
+            if (candles<0):
+                warnText += "\n-The number of chlorate candles must be greater than\n or equal to 0"
+                validInputs= False
 
-        remainingHr = hourBreathing(fitSurv, unfitSurv) #stores the remaining man-hours 
+            if (canisters<0):
+                warnText += "\n-The number of ExtendAir Kits must be greater than\n or equal to 0"
+                validInputs= False
 
-        presATA = fswToATA(pressure) #stores the pressure in ATA
+            if (pressure<0):
+                warnText += "\n-The pressure must be greater than or equal to 0"
+                validInputs= False
+            
+            if ((flood%20)!=0):
+                warnText += "\n-The percentage of the compartment flooded must be\n rounded to the nearest 20%"
+                validInputs= False
+            
+            if (flood<0 or flood>100):
+                warnText += "\n-The percentage of the compartment flooded must be\n between 0 and 100"
+                validInputs= False
 
-        vBreath = calcVBreath(flood, fitSurv, presATA) #stores the volume of breathable air
+            if (coConc<0 or coConc>100):
+                warnText += "\n-The concentration of carbon dioxide must be between\n 0 and 100"
+                validInputs= False
+            
+            if (eabs > (fitSurv+unfitSurv)):
+                warnText += ("\n-The number of survivors with EABs must be between\n0 and " + str(fitSurv+unfitSurv))
+                validInputs= False
 
-        finalP = pFinal(flood, presATA, vBreath) #stores final pressure
+            if (oConc<0 or oConc>100):
+                warnText += "\n-The concentration of oxygen must be between\n 0 and 100"
+                validInputs= False
 
-        oSET = oStartEscapeTime(candles, fitSurv, unfitSurv, flood, oConc, vBreath, temp, remainingHr) #stores oxygen start escape time
-        #Converts hours (decimal) to days (whole number) and hours (whole number) 
-        oSETDay = math.floor(oSET/24)
-        oSETHr = math.floor(oSET-24*oSETDay)
+            #Displays a warning box if inputs are invalid
+            if (not validInputs):
+                enterWarn = Toplevel(root)
+                enterWarn.title("VALUE ERROR")
+                enterWarn.geometry("600x400")
+                ewLabel = Label(enterWarn, text=("Invalid Inputs:\n"+warnText))
+                ewLabel.config(font=('Fixedsys', 15))
+                ewLabel.pack()
+                ewButt = Button(enterWarn, text="Close", command=enterWarn.destroy)
+                ewButt.config(font=('Fixedsys', 20), fg='darkblue')
+                ewButt.pack()
+                break
+                
 
-        coSET = coStartEscapeTime(canisters, fitSurv, unfitSurv, flood, coConc, vBreath, temp, remainingHr) #stores carbon dioxide start escape time
-        #Converts hours (decimal) to days (whole number) and hours (whole number) 
-        coSETDay = math.floor(coSET/24)
-        coSETHr = math.floor(coSET-24*coSETDay)
+            oSurvTime = oxSurvTime(fitSurv, unfitSurv, candles, flood, oConc, temp) #stores the oxygen survival time
+            #Converts hours (decimal) to days (whole number) and hours (whole number) 
+            oSTDay = math.floor(oSurvTime/24)
+            oSTHr = math.floor(oSurvTime-24*oSTDay)
+            
+            coST = coSurvTime(fitSurv, unfitSurv, canisters, flood, coConc, temp) #stores the carbon dioxide survival time
+            #Converts hours (decimal) to days (whole number) and hours (whole number) 
+            coSTDay = math.floor(coST/24)
+            coSTHr = math.floor(coST-24*coSTDay)
 
-        #Displays the survival/start escape times onto the labels. ST was omitted to save space but can be added back by uncommenting lines
-        #oSTLabel.config(text="Oxygen survival time:\n " + str(oSTDay) + " day " + str(oSTHr) + " hr")
-        #coSTLabel.config(text="Carbon dioxide survival time:\n " + str(coSTDay) + " day " + str(coSTHr) + " hr")
-        oSETLabel.config(text="O2 start escape time:\n " + str(oSETDay) + " day " + str(oSETHr) + " hr")
-        coSETLabel.config(text="CO2 start escape time:\n " + str(coSETDay) + " day " + str(coSETHr) + " hr")
+            remainingHr = hourBreathing(fitSurv, unfitSurv) #stores the remaining man-hours 
 
-        if (oSET< coSET):
-            SETLabel.config(text="START ESCAPE TIME:\n " + str(oSETDay) + " day " + str(oSETHr) + " hr")
-        else:
-            SETLabel.config(text="START ESCAPE TIME:\n " + str(coSETDay) + " day " + str(coSETHr) + " hr")
+            presATA = fswToATA(pressure) #stores the pressure in ATA
+
+            vBreath = calcVBreath(flood, fitSurv, presATA) #stores the volume of breathable air
+
+            finalP = pFinal(flood, presATA, vBreath) #stores final pressure
+
+            oSET = oStartEscapeTime(candles, fitSurv, unfitSurv, flood, oConc, vBreath, temp, remainingHr) #stores oxygen start escape time
+            #Converts hours (decimal) to days (whole number) and hours (whole number) 
+            oSETDay = math.floor(oSET/24)
+            oSETHr = math.floor(oSET-24*oSETDay)
+
+            coSET = coStartEscapeTime(canisters, fitSurv, unfitSurv, flood, coConc, vBreath, temp, remainingHr) #stores carbon dioxide start escape time
+            #Converts hours (decimal) to days (whole number) and hours (whole number) 
+            coSETDay = math.floor(coSET/24)
+            coSETHr = math.floor(coSET-24*coSETDay)
+
+            #Displays the survival/start escape times onto the labels. ST was omitted to save space but can be added back by uncommenting lines
+            #oSTLabel.config(text="Oxygen survival time:\n " + str(oSTDay) + " day " + str(oSTHr) + " hr")
+            #coSTLabel.config(text="Carbon dioxide survival time:\n " + str(coSTDay) + " day " + str(coSTHr) + " hr")
+            oSETLabel.config(text="O2 start escape time:\n " + str(oSETDay) + " day " + str(oSETHr) + " hr")
+            coSETLabel.config(text="CO2 start escape time:\n " + str(coSETDay) + " day " + str(coSETHr) + " hr")
+
+            if (oSET< coSET):
+                SETLabel.config(text="START ESCAPE TIME:\n " + str(oSETDay) + " day " + str(oSETHr) + " hr")
+            else:
+                SETLabel.config(text="START ESCAPE TIME:\n " + str(coSETDay) + " day " + str(coSETHr) + " hr")
 
 
-        #Checks if all survivors are wearing EABs. If not, the pressure start escape time is not calculated 
-        if eabs==(fitSurv+unfitSurv):
-            eabSET = eabStartEscapeTime(fitSurv, unfitSurv, finalP, vBreath, remainingHr) #stores eab start escape time
-            #Converts hours (decimal) to days (whole number) and hours (whole number)
-            eabSETDay = math.floor(eabSET/24)
-            eabSETHr = math.floor(eabSET-24*eabSETDay)
+            #Checks if all survivors are wearing EABs. If not, the pressure start escape time is not calculated 
+            if eabs==(fitSurv+unfitSurv):
+                eabSET = eabStartEscapeTime(fitSurv, unfitSurv, finalP, vBreath, remainingHr) #stores eab start escape time
+                #Converts hours (decimal) to days (whole number) and hours (whole number)
+                eabSETDay = math.floor(eabSET/24)
+                eabSETHr = math.floor(eabSET-24*eabSETDay)
 
-            #Displays the start escape times onto the label 
-            eabSETLabel.config(text="Pressure start escape time:\n " + str(eabSETDay) + " day " + str(eabSETHr) + " hr")
-            if (eabSET<oSET and eabSET<coSET):
-                SETLabel.config(text="START ESCAPE TIME:\n " + str(eabSETDay) + " day " + str(eabSETHr) + " hr")
-        else:
-            eabSET="NA"
-            eabSETLabel.config(eabSETLabel.config(text="EABs start escape time:\n N/A"))
+                #Displays the start escape times onto the label 
+                eabSETLabel.config(text="Pressure start escape time:\n " + str(eabSETDay) + " day " + str(eabSETHr) + " hr")
+                if (eabSET<oSET and eabSET<coSET):
+                    SETLabel.config(text="START ESCAPE TIME:\n " + str(eabSETDay) + " day " + str(eabSETHr) + " hr")
+            else:
+                eabSET="NA"
+                eabSETLabel.config(eabSETLabel.config(text="EABs start escape time:\n N/A"))
+            break
     #If any of the boxes have invalid inputs (blank or inconsistent with casting), a ValueError will be catched and a warning box will pop up
     except ValueError:
-        messagebox.showwarning("VALUE ERROR","Invalid Inputs\n\nPlease do not leave blank boxes.")
+        enterWarn = Toplevel(root)
+        enterWarn.title("VALUE ERROR")
+        enterWarn.geometry("400x200")
+        ewLabel = Label(enterWarn, text="Invalid Inputs\nOnly numbers and decimal inputs\nDo not leave fields blank\n")
+        ewLabel.config(font=('Fixedsys', 15))
+        ewLabel.pack()
+        ewButt = Button(enterWarn, text="Close", command=enterWarn.destroy)
+        ewButt.config(font=('Fixedsys', 20), fg='darkblue')
+        ewButt.pack()
     
 
 def helpClick():
@@ -738,42 +809,73 @@ def helpClick():
     instructions = Label(h2, text=instr)
     instructions.grid(row=1, column=0, sticky='w')
     instructions.config(font=('Fixedsys', 10))
+    hButt = Button(h2, text="Close", command=helpWindow.destroy)
+    hButt.config(font=('Fixedsys', 20), fg='darkblue')
+    hButt.grid(row=2, column=0)
 
 
 def plotClick():
     #This functions stores the data in the enter boxes, graphs it, and adds it to the spreadsheet when the "Plot Data" button is clicked
 
-    #counter serves as a way to track the amount of times the button is clicked. On the first click, the start time should begin
     global counter
-    global start
-    counter=counter+1
-    if counter==1:
-        start = time.time()
-    
-    #Adds the data in the enter boxes to the array of Y values
-    oxY.append(float(oxEnter.get()))
-    coY.append(float(coEnter.get()))
-    pY.append(float(pressEnter.get()))
 
-    #sets the time (for the X value) to the current time subtracted by the start time (set on the first click)
-    current = time.time()
-    t = current - start
+    try:
+        #counter serves as a way to track the amount of times the button is clicked. On the first click, the start time should begin
+        global start
+        counter=counter+1
 
-    #adds the time (in seconds) to the array of X values
-    oxX.append(t)
-    coX.append(t)
-    pX.append(t)
+        if counter==1:
+            start = time.time()
 
-    #Creates the line of best fit 
-    #Will plot the line of best fit only if there is more than one point
-    if (counter > 1):
-        plotGraphs(oxX, oxY, coX, coY, pX, pY)
+        #Adds the data in the enter boxes to the array of Y values
+        oxY.append(float(oxEnter.get()))
+        coY.append(float(coEnter.get()))
+        pY.append(float(pressEnter.get()))
 
-    #rounds down the seconds to a whole number:
-    ti = math.floor(t)
+        
+        #sets the time (for the X value) to the current time subtracted by the start time (set on the first click)
+        current = time.time()
+        t = current - start
 
-    #inserts the data point into the spreadsheet
-    data.insert(parent='', index='end', iid=(counter-1), values=(ti, oxEnter.get(), coEnter.get(), pressEnter.get()))
+        #adds the time (in seconds) to the array of X values
+        oxX.append(t)
+        coX.append(t)
+        pX.append(t)
+
+        #Creates the line of best fit 
+        #Will plot the line of best fit only if there is more than one point
+        if (counter > 1):
+            plotGraphs(oxX, oxY, coX, coY, pX, pY)
+
+        #rounds down the seconds to a whole number:
+        ti = math.floor(t)
+
+        #inserts the data point into the spreadsheet
+        data.insert(parent='', index='end', iid=(counter-1), values=(ti, oxEnter.get(), coEnter.get(), pressEnter.get()))
+    except ValueError:
+        #Undos anything done before displaying the error
+        counter = counter - 1
+        oxylen = len(oxY)
+        coylen = len(coY)
+        pylen = len(pY)
+        #if the length of the oxygen array is greater, delete the added value
+        if (oxylen>coylen):
+            del oxY[int(oxylen-1)]
+        elif (coylen>pylen):
+            #if the length of co2 is greater than pressure, delete the latest co2 and oxygen indexes 
+            del oxY[int(oxylen-1)]
+            del coY[int(oxylen-1)]
+        
+
+        plotWarn = Toplevel(root)
+        plotWarn.title("VALUE ERROR")
+        plotWarn.geometry("400x200")
+        pwLabel = Label(plotWarn, text="Invalid Inputs\nOnly numbers and decimal inputs\nDo not leave fields blank\n")
+        pwLabel.config(font=('Fixedsys', 15))
+        pwLabel.pack()
+        pwButt = Button(plotWarn, text="Close", command=plotWarn.destroy)
+        pwButt.config(font=('Fixedsys', 20), fg='darkblue')
+        pwButt.pack()
 
 def deleteClick():
     #This function deletes the plotted data points from the spreadsheet and the graph 
@@ -823,8 +925,15 @@ def deleteClick():
 
     #Checks for no selected row and displays a warning message in that case
     except IndexError:
-        messagebox.showwarning("INDEX ERROR","No data selected")
-
+        deleteWarn = Toplevel(root)
+        deleteWarn.title("INDEX ERROR")
+        deleteWarn.geometry("400x200")
+        dwLabel = Label(deleteWarn, text="No data selected\n")
+        dwLabel.config(font=('Fixedsys', 20))
+        dwLabel.pack()
+        dwButt = Button(deleteWarn, text="Close", command=deleteWarn.destroy)
+        dwButt.config(font=('Fixedsys', 20), fg='darkblue')
+        dwButt.pack()
 def undoClick():
     #This function undos a deletion on the spreadsheet and graph 
     global storeIndex
@@ -884,7 +993,15 @@ def undoClick():
         if undoCount<0:
             undoButt.config(bg='lightgrey', fg="darkgrey")
     except IndexError:
-        messagebox.showwarning("INDEX ERROR","Cannot Undo")
+        undoWarn = Toplevel(root)
+        undoWarn.title("INDEX ERROR")
+        undoWarn.geometry("400x200")
+        uwLabel = Label(undoWarn, text="Cannot Undo\n")
+        uwLabel.config(font=('Fixedsys', 20))
+        uwLabel.pack()
+        uwButt = Button(undoWarn, text="Close", command=undoWarn.destroy)
+        uwButt.config(font=('Fixedsys', 20), fg='darkblue')
+        uwButt.pack()
 
 
 
