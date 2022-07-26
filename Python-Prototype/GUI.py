@@ -192,7 +192,7 @@ def pFinal(percentFlood, pressure, volumeBreath):
     pFinal = ((volumeCompt)*pressure+airAddedByEscapes)/volumeBreath
     return pFinal
 
-def plotGraphs(oxX, oxY, coX, coY, pX, pY):
+def plotGraphs(oxX, oxY, coX, coY, pX, pY, fitSurv):
     global o
     global c
     global p
@@ -222,11 +222,24 @@ def plotGraphs(oxX, oxY, coX, coY, pX, pY):
         elif (newy<13):
             newoX.append(x)
             newoY.append(newy)
-            #Adds label to time where level is reached
-            setox = (13-ob)/oa #x coordinate where critical level is reached
-            setoxtext="Time:\n" + str(math.floor(setox))
-            o.scatter(setox, 13, color='red')
-            o.text(setox, 13, setoxtext, ha='right', va='top', fontname="Serif")
+            #Adds label to time where level is reached and when start escape time is (surv/8 (surv/hr))
+            crox = (13-ob)/oa #x coordinate where critical level is reached
+            #the critical level time in hours and minutes for label
+            croxhr = math.floor(crox)
+            croxmin = math.floor((crox-croxhr)*60)
+            croxtext="Time:\n" + str(croxhr) + " hr\n" + str(croxmin) + " min"
+            #the SET is the time when critical level is reaches - the numbers of escapers/(8 escapers/hour)
+            setox = crox - int(fitSurv)/8
+            #the time in hours and minutes 
+            setoxhr = math.floor(setox)
+            setoxmin = math.floor((setox-setoxhr)*60)
+            #calculation of the y coordinate
+            oy = oa*setox + ob
+            setoxtext = "SET:\n" + str(setoxhr) + " hr\n" + str(setoxmin) + " min"
+            o.scatter(crox, 13, color='darkred')
+            o.scatter(setox, oy, color='red')
+            o.text(crox, 13, croxtext, ha='right', va='top', fontname="Serif")
+            o.text(setox, oy, setoxtext, ha='right', va='top', fontname="Serif")
             break
         newoX.append(x)
         newoY.append(newy)
@@ -239,7 +252,7 @@ def plotGraphs(oxX, oxY, coX, coY, pX, pY):
     o.set_ylim([11, 25])
     #Adds titles
     o.set_title("Oxygen Readings", fontname="Serif")
-    o.set_xlabel("Time (seconds)", fontname="Serif")
+    o.set_xlabel("Time (hours)", fontname="Serif")
     o.set_ylabel("Oxygen Concentration (%SEV)", fontname="Serif")
 
     #Creates line of best fit for carbon dioxide with same process as oxygen
@@ -264,11 +277,24 @@ def plotGraphs(oxX, oxY, coX, coY, pX, pY):
         elif (newy>6):
             newcoX.append(x)
             newcoY.append(newy)
-            #Adds label to time where level is reached
-            setcox = (6-cob)/coa #x coordinate where critical level is reached
-            setcoxtext="Time:\n" + str(math.floor(setcox))
-            c.scatter(setcox, 6, color='red')
-            c.text(setcox, 6, setcoxtext, ha='left', va='top', fontname="Serif")
+            #Adds label to time where level is reached and when start escape time is (surv/8 (surv/hr))
+            crco = (6-cob)/coa #x coordinate where critical level is reached
+            #the critical level time in hours and minutes for label
+            crcohr = math.floor(crco)
+            crcomin = math.floor((crco-crcohr)*60)
+            crcotext="Time:\n" + str(crcohr) + " hr\n" + str(crcomin) + " min"
+            #the SET is the time when critical level is reaches - the numbers of escapers/(8 escapers/hour)
+            setco = crco - int(fitSurv)/8
+            #the time in hours and minutes 
+            setcohr = math.floor(setco)
+            setcomin = math.floor((setco-setcohr)*60)
+            #calculation of the y coordinate
+            coy = coa*setco + cob
+            setcotext = "SET:\n" + str(setcohr) + " hr\n" + str(setcomin) + " min"
+            c.scatter(crco, 6, color='darkred')
+            c.scatter(setco, coy, color='red')
+            c.text(crco, 6, crcotext, ha='right', va='top', fontname="Serif")
+            c.text(setco, coy, setcotext, ha='right', va='top', fontname="Serif")
             break
         newcoX.append(x)
         newcoY.append(newy)
@@ -278,7 +304,7 @@ def plotGraphs(oxX, oxY, coX, coY, pX, pY):
     c.plot(newcoX, newcoY)
     c.set_ylim([0, 7])
     c.set_title("Carbon Dioxide Readings", fontname="Serif")
-    c.set_xlabel("Time (seconds)", fontname="Serif")
+    c.set_xlabel("Time (hours)", fontname="Serif")
     c.set_ylabel("Carbon Dioxide Concentration (%SEV)", fontname="Serif")
 
 
@@ -304,11 +330,24 @@ def plotGraphs(oxX, oxY, coX, coY, pX, pY):
         elif (newy>23):
             newpX.append(x)
             newpY.append(newy)
-            #Adds label to time where level is reached
-            setpx = (23-pb)/pa #x coordinate where critical level is reached
-            setpxtext="Time:\n" + str(math.floor(setpx))
-            p.scatter(setpx, 23, color='red')
-            p.text(setpx, 23, setpxtext, ha='left', va='top', fontname="Serif")
+            #Adds label to time where level is reached and when start escape time is (surv/8 (surv/hr))
+            crp = (23-pb)/pa #x coordinate where critical level is reached
+            #the critical level time in hours and minutes for label
+            crphr = math.floor(crp)
+            crpmin = math.floor((crp-crphr)*60)
+            crptext="Time:\n" + str(crphr) + " hr\n" + str(crpmin) + " min"
+            #the SET is the time when critical level is reaches - the numbers of escapers/(8 escapers/hour)
+            setp = crp - int(fitSurv)/8
+            #the time in hours and minutes 
+            setphr = math.floor(setp)
+            setpmin = math.floor((setp-setphr)*60)
+            #calculation of the y coordinate
+            py = pa*setp + pb
+            setptext = "SET:\n" + str(setphr) + " hr\n" + str(setpmin) + " min"
+            p.scatter(crp, 23, color='darkred')
+            p.scatter(setp, py, color='red')
+            p.text(crp, 23, crptext, ha='right', va='top', fontname="Serif")
+            p.text(setp, py, setptext, ha='right', va='top', fontname="Serif")
             break
         newpX.append(x)
         newpY.append(newy)
@@ -318,7 +357,7 @@ def plotGraphs(oxX, oxY, coX, coY, pX, pY):
     p.plot(newpX, newpY)
     p.set_ylim([0, 25])
     p.set_title("Pressure Readings", fontname="Serif")
-    p.set_xlabel("Time (seconds)", fontname="Serif")
+    p.set_xlabel("Time (hours)", fontname="Serif")
     p.set_ylabel("Pressure (fsw)", fontname="Serif")
 
     #Plots the x (time) and y (data) arrays with points at the data points (o marker) and a dark blue curve color
@@ -502,21 +541,21 @@ fP = Figure(figsize=(9,4.5), dpi=80)
 o = fO.add_subplot(111)
 o.set_ylim([13, 25])
 o.set_title("Oxygen Readings", fontname="Serif")
-o.set_xlabel("Time (seconds)", fontname="Serif")
+o.set_xlabel("Time (hours)", fontname="Serif")
 o.set_ylabel("Oxygen Concentration (%SEV)", fontname="Serif")
 
 #Adds carbon dioxide plot to the figure with graph titles and y limits to match the Guard Book's axis labels (0%-6%)
 c = fCO.add_subplot(111)
 c.set_ylim([0, 6])
 c.set_title("Carbon Dioxide Readings", fontname="Serif")
-c.set_xlabel("Time (seconds)", fontname="Serif")
+c.set_xlabel("Time (hours)", fontname="Serif")
 c.set_ylabel("Carbon Dioxide Concentration (%SEV)", fontname="Serif")
 
 #Adds pressure plot to the figure with graph titles and y limits to match the Guard Book's axis labels (0%-25%)
 p = fP.add_subplot(111)
 p.set_ylim([0, 25])
 p.set_title("Pressure Readings", fontname="Serif")
-p.set_xlabel("Time (seconds)", fontname="Serif")
+p.set_xlabel("Time (hours)", fontname="Serif")
 p.set_ylabel("Pressure (fsw)", fontname="Serif")
 
 
@@ -559,7 +598,7 @@ data.column("Carbon Dioxide %SEV", anchor=W, width=100, minwidth=50)
 data.column("Pressure FSW", anchor=W, width=50, minwidth=25)
 
 #Configures the headings:
-data.heading("Time", text="Time (s)", anchor=W)
+data.heading("Time", text="Time (min)", anchor=W)
 data.heading("Oxygen %SEV", text="Oxygen (%SEV)", anchor=W)
 data.heading("Carbon Dioxide %SEV", text="Carbon Dioxide (%SEV)", anchor=W)
 data.heading("Pressure FSW", text="Pressure (FSW)", anchor=W)
@@ -666,35 +705,59 @@ def enterClick():
             #Converts hours (decimal) to days (whole number) and hours (whole number) 
             oSETDay = math.floor(oSET/24)
             oSETHr = math.floor(oSET-24*oSETDay)
+            oSETMin = math.floor((oSET-(oSETDay*24+oSETHr))*60)
 
             coSET = coStartEscapeTime(canisters, fitSurv, unfitSurv, flood, coConc, vBreath, temp, remainingHr) #stores carbon dioxide start escape time
             #Converts hours (decimal) to days (whole number) and hours (whole number) 
             coSETDay = math.floor(coSET/24)
             coSETHr = math.floor(coSET-24*coSETDay)
+            coSETMin = math.floor((coSET-(24*coSETDay + coSETHr))*60)
 
             #Displays the survival/start escape times onto the labels. ST was omitted to save space but can be added back by uncommenting lines
             #oSTLabel.config(text="Oxygen survival time:\n " + str(oSTDay) + " day " + str(oSTHr) + " hr")
             #coSTLabel.config(text="Carbon dioxide survival time:\n " + str(coSTDay) + " day " + str(coSTHr) + " hr")
-            oSETLabel.config(text="O2 start escape time:\n " + str(oSETDay) + " day " + str(oSETHr) + " hr")
-            coSETLabel.config(text="CO2 start escape time:\n " + str(coSETDay) + " day " + str(coSETHr) + " hr")
+            if (oSETDay > 0):
+                oSETLabel.config(text="O2 start escape time:\n " + str(oSETDay) + " day " + str(oSETHr) + " hr")
+            else:
+                oSETLabel.config(text="O2 start escape time:\n " + str(oSETHr) + " hr " + str(oSETMin) + " min")
+            if (coSETDay > 0):
+                coSETLabel.config(text="CO2 start escape time:\n " + str(coSETDay) + " day " + str(coSETHr) + " hr")
+            else:
+                coSETLabel.config(text="CO2 start escape time:\n " + str(coSETHr) + " hr " + str(coSETMin) + " min")
 
             if (oSET< coSET):
-                SETLabel.config(text="START ESCAPE TIME:\n " + str(oSETDay) + " day " + str(oSETHr) + " hr")
+                if (oSETDay > 0):
+                    SETLabel.config(text="O2 start escape time:\n " + str(oSETDay) + " day " + str(oSETHr) + " hr")
+                else:
+                    SETLabel.config(text="O2 start escape time:\n " + str(oSETHr) + " hr " + str(oSETMin) + " min")
             else:
-                SETLabel.config(text="START ESCAPE TIME:\n " + str(coSETDay) + " day " + str(coSETHr) + " hr")
+                if (coSETDay > 0):
+                    SETLabel.config(text="CO2 start escape time:\n " + str(coSETDay) + " day " + str(coSETHr) + " hr")
+                else:
+                    SETLabel.config(text="CO2 start escape time:\n " + str(coSETHr) + " hr " + str(coSETMin) + " min")
 
 
             #Checks if all survivors are wearing EABs. If not, the pressure start escape time is not calculated 
             if eabs==(fitSurv+unfitSurv):
                 eabSET = eabStartEscapeTime(fitSurv, unfitSurv, finalP, vBreath, remainingHr) #stores eab start escape time
                 #Converts hours (decimal) to days (whole number) and hours (whole number)
+                print(eabSET)
                 eabSETDay = math.floor(eabSET/24)
                 eabSETHr = math.floor(eabSET-24*eabSETDay)
+                eabSETMin = math.floor((eabSET-(24*eabSETDay + eabSETHr))*60)
+                print(eabSETMin)
 
                 #Displays the start escape times onto the label 
-                eabSETLabel.config(text="Pressure start escape time:\n " + str(eabSETDay) + " day " + str(eabSETHr) + " hr")
+                if (eabSETDay > 0):
+                    eabSETLabel.config(text="Pressure start escape time:\n " + str(eabSETDay) + " day " + str(eabSETHr) + " hr")
+                else:
+                    eabSETLabel.config(text="Pressure start escape time:\n " + str(eabSETHr) + " hr " + str(eabSETMin) + " min")
+                
                 if (eabSET<oSET and eabSET<coSET):
-                    SETLabel.config(text="START ESCAPE TIME:\n " + str(eabSETDay) + " day " + str(eabSETHr) + " hr")
+                    if (eabSETDay > 0):
+                        SETLabel.config(text="Pressure start escape time:\n " + str(eabSETDay) + " day " + str(eabSETHr) + " hr")
+                    else:
+                        SETLabel.config(text="Pressure start escape time:\n " + str(eabSETHr) + " hr " + str(eabSETMin) + " min")
             else:
                 eabSET="NA"
                 eabSETLabel.config(eabSETLabel.config(text="EABs start escape time:\n N/A"))
@@ -819,10 +882,13 @@ def plotClick():
 
     global counter
 
+
     try:
         #counter serves as a way to track the amount of times the button is clicked. On the first click, the start time should begin
         global start
         counter=counter+1
+
+        fitSurv = fitEnter.get()
 
         if counter==1:
             start = time.time()
@@ -835,19 +901,22 @@ def plotClick():
         
         #sets the time (for the X value) to the current time subtracted by the start time (set on the first click)
         current = time.time()
-        t = current - start
+        t =(current - start)/60
+        thr = t/60
 
-        #adds the time (in seconds) to the array of X values
-        oxX.append(t)
-        coX.append(t)
-        pX.append(t)
+        #adds the time (in hours) to the array of X values
+        oxX.append(thr)
+        coX.append(thr)
+        pX.append(thr)
+
+
 
         #Creates the line of best fit 
         #Will plot the line of best fit only if there is more than one point
         if (counter > 1):
-            plotGraphs(oxX, oxY, coX, coY, pX, pY)
+            plotGraphs(oxX, oxY, coX, coY, pX, pY, fitSurv)
 
-        #rounds down the seconds to a whole number:
+        #rounds down the minutes to a whole number:
         ti = math.floor(t)
 
         #inserts the data point into the spreadsheet
@@ -895,6 +964,8 @@ def deleteClick():
         selected_item = int(data.selection()[0])-count
         print(selected_item)
 
+        fitSurv = fitEnter.get()
+
         #Stores the value from the deletion 
         storeO.append(oxY[int(selected_item)])
         storeCO.append(coY[int(selected_item)])
@@ -915,7 +986,7 @@ def deleteClick():
         data.delete((selected_item+count))
 
         if (counter > 1):
-            plotGraphs(oxX, oxY, coX, coY, pX, pY)
+            plotGraphs(oxX, oxY, coX, coY, pX, pY, fitSurv)
 
         #Changes the colors of the undo button so that it activates after a row has been deleted
         undoButt.config(bg="white", fg="darkblue")
@@ -958,6 +1029,8 @@ def undoClick():
         
         tr = math.floor(storeT[undoCount]) #Time rounded
 
+        fitSurv = fitEnter.get()
+
         #Inserts stored values back into the spreadsheet
         data.insert(parent='', index=ind, iid=(ind), values=(tr, storeO[undoCount], storeCO[undoCount], storeP[undoCount]))
 
@@ -983,7 +1056,7 @@ def undoClick():
 
         #plots the graphs with the modified arrays
         if (counter > 1):
-            plotGraphs(oxX, oxY, coX, coY, pX, pY)
+            plotGraphs(oxX, oxY, coX, coY, pX, pY, fitSurv)
 
         #Modifies counters to take into account the addition of the value into the graph/spreadsheet
         undoCount=undoCount-1
