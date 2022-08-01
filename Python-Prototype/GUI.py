@@ -77,7 +77,7 @@ data = ttk.Treeview(frame3)
 
 #The following functions are calculations of survival times, start escape times, and other necessary variables
 #A more thorough compilation of formulas, including the units and explanations are on the Guard Book spreadsheet created by Tony Quatroche
-#Email vickicarrica@yahoo.com for a reference of this document
+#Email vickicarrica@yahoo.com for a copy of this document
 
 def oxSurvTime(fit, unfit, cand, percentFlood, oxConc, temp):
     #This function calculates oxygen survival time based on sailor inputs
@@ -193,6 +193,8 @@ def pFinal(percentFlood, pressure, volumeBreath):
     return pFinal
 
 def plotGraphs(oxX, oxY, coX, coY, pX, pY, fitSurv):
+    #This function plots the inputted data points for oxygen, carbon dioxide, and pressure
+    #It also plots the survival time and start escape time (based on the survival time and knowing that 8 fit survivors can escape per hour) 
     global o
     global c
     global p
@@ -227,7 +229,7 @@ def plotGraphs(oxX, oxY, coX, coY, pX, pY, fitSurv):
             #the critical level time in hours and minutes for label
             croxhr = math.floor(crox)
             croxmin = math.floor((crox-croxhr)*60)
-            croxtext="Time:\n" + str(croxhr) + " hr\n" + str(croxmin) + " min"
+            croxtext="Survival Time:\n" + str(croxhr) + " hr\n" + str(croxmin) + " min"
             #the SET is the time when critical level is reaches - the numbers of escapers/(8 escapers/hour)
             setox = crox - int(fitSurv)/8
             #the time in hours and minutes 
@@ -282,7 +284,7 @@ def plotGraphs(oxX, oxY, coX, coY, pX, pY, fitSurv):
             #the critical level time in hours and minutes for label
             crcohr = math.floor(crco)
             crcomin = math.floor((crco-crcohr)*60)
-            crcotext="Time:\n" + str(crcohr) + " hr\n" + str(crcomin) + " min"
+            crcotext="Survival Time:\n" + str(crcohr) + " hr\n" + str(crcomin) + " min"
             #the SET is the time when critical level is reaches - the numbers of escapers/(8 escapers/hour)
             setco = crco - int(fitSurv)/8
             #the time in hours and minutes 
@@ -335,7 +337,7 @@ def plotGraphs(oxX, oxY, coX, coY, pX, pY, fitSurv):
             #the critical level time in hours and minutes for label
             crphr = math.floor(crp)
             crpmin = math.floor((crp-crphr)*60)
-            crptext="Time:\n" + str(crphr) + " hr\n" + str(crpmin) + " min"
+            crptext="Survival Time:\n" + str(crphr) + " hr\n" + str(crpmin) + " min"
             #the SET is the time when critical level is reaches - the numbers of escapers/(8 escapers/hour)
             setp = crp - int(fitSurv)/8
             #the time in hours and minutes 
@@ -393,28 +395,298 @@ storeIndex = []
 HOST = "127.0.0.1"
 PORT = 8423
 
+#Declaration of global date and time variables 
+hr = 0
+min = 0
+day = 0
+month = 0
+year = 0
+day365=0
+hour8760=0
+
+def timeInHrs():
+    #This function turns hours, days, and months into a single value (hours out of 8760 in a year)
+    global day
+    global month
+    global day365
+    global hour8760
+    if (month==1):
+        day365 = day
+    elif(month==2):
+        day365 = 31+day
+    elif(month==3):
+        day365 = 31+28+day
+    elif(month==4):
+        day365 = 31+28+31+day
+    elif(month==5):
+        day365 = 31+28+31+30+day
+    elif(month==6):
+        day365 = 31+28+31+30+31+day
+    elif(month==7):
+        day365 = 31+28+31+30+31+30+day
+    elif(month==8):
+        day365 = 31+28+31+30+31+30+31+day
+    elif(month==9):
+        day365 = 31+28+31+30+31+30+31+31+day
+    elif(month==10):
+        day365 = 31+28+31+30+31+30+31+31+30+day
+    elif(month==11):
+        day365 = 31+28+31+30+31+30+31+31+30+31+day
+    elif(month==12):
+        day365 = 31+28+31+30+31+30+31+31+30+31+30+day
+
+    hour8760 = day365*24 -24
+
+def welEnterClick():
+    #This function stores the values of the date and time to global variables that are later used in start escape time calculation
+    global hr 
+    global min
+    global day
+    global month
+    global year 
+    global nextYear
+    hr = int(milhrEnter.get())
+    min = int(minEnter.get())
+    day = int(dayEnter.get())
+    month = int(monthEnter.get())
+    year = int(yearEnter.get())
+    nextYear = year+1
+    timeInHrs()
+    print(day365)
+    print(hour8760) 
+
+def setDisplay(setHours):
+    #This function displays the start escape time as a date 
+    global hr 
+    global min
+    global day
+    global month
+    global year 
+    global hour8760
+    displayYear = int
+    displayMonth = int
+    displayDay = int
+    displayHr = int
+    displayMin = int
+
+
+    setInHours = hour8760 + setHours
+    if(setInHours < 744):
+        displayYear = year
+        displayMonth = 1
+        displayDay = math.floor(setInHours/24)+1
+        displayHr = math.floor(setInHours-((displayDay-1)*24))
+        displayMin = math.floor((setInHours-(((displayDay-1)*24)+displayHr))*60)
+        displayMStr = str(displayMin)
+        if (displayMin<10):
+            displayMStr = "0" + str(displayMin)
+        SETLabel.config(text="START ESCAPE TIME:\n " + str(displayMonth) + "-" + str(displayDay) + "-" + str(displayYear) + " " + str(displayHr) + ":" + displayMStr)
+    elif(setInHours < 1416):
+        displayYear = year
+        displayMonth = 2
+        displayDay = math.floor(setInHours/24)+1
+        displayHr = math.floor(setInHours-((displayDay-1)*24))
+        displayMin = math.floor((setInHours-(((displayDay-1)*24)+displayHr))*60)
+        displayMStr = str(displayMin)
+        if (displayMin<10):
+            displayMStr = "0" + str(displayMin)
+        SETLabel.config(text="START ESCAPE TIME:\n " + str(displayMonth) + "-" + str(displayDay-31) + "-" + str(displayYear) + " " + str(displayHr) + ":" + displayMStr)
+    elif(setInHours < 2160):
+        displayYear = year
+        displayMonth = 3
+        displayDay = math.floor(setInHours/24)+1
+        displayHr = math.floor(setInHours-((displayDay-1)*24))
+        displayMin = math.floor((setInHours-(((displayDay-1)*24)+displayHr))*60)
+        displayMStr = str(displayMin)
+        if (displayMin<10):
+            displayMStr = "0" + str(displayMin)
+        SETLabel.config(text="START ESCAPE TIME:\n " + str(displayMonth) + "-" + str(displayDay-(31+28)) + "-" + str(displayYear) + " " + str(displayHr) + ":" + displayMStr)
+    elif(setInHours < 2880):
+        displayYear = year
+        displayMonth = 4
+        displayDay = math.floor(setInHours/24)+1
+        displayHr = math.floor(setInHours-((displayDay-1)*24))
+        displayMin = math.floor((setInHours-(((displayDay-1)*24)+displayHr))*60)
+        displayMStr = str(displayMin)
+        if (displayMin<10):
+            displayMStr = "0" + str(displayMin)
+        SETLabel.config(text="START ESCAPE TIME:\n " + str(displayMonth) + "-" + str(displayDay-(31+28+31)) + "-" + str(displayYear) + " " + str(displayHr) + ":" + displayMStr)
+    elif(setInHours < 3624):
+        displayYear = year
+        displayMonth = 5
+        displayDay = math.floor(setInHours/24)+1
+        displayHr = math.floor(setInHours-((displayDay-1)*24))
+        displayMin = math.floor((setInHours-(((displayDay-1)*24)+displayHr))*60)
+        displayMStr = str(displayMin)
+        if (displayMin<10):
+            displayMStr = "0" + str(displayMin)
+        SETLabel.config(text="START ESCAPE TIME:\n " + str(displayMonth) + "-" + str(displayDay-(31+28+31+30)) + "-" + str(displayYear) + " " + str(displayHr) + ":" + displayMStr)
+    elif(setInHours < 4344):
+        displayYear = year
+        displayMonth = 6
+        displayDay = math.floor(setInHours/24)+1
+        displayHr = math.floor(setInHours-((displayDay-1)*24))
+        displayMin = math.floor((setInHours-(((displayDay-1)*24)+displayHr))*60)
+        displayMStr = str(displayMin)
+        if (displayMin<10):
+            displayMStr = "0" + str(displayMin)
+        SETLabel.config(text="START ESCAPE TIME:\n " + str(displayMonth) + "-" + str(displayDay-(31+28+31+30+31)) + "-" + str(displayYear) + " " + str(displayHr) + ":" + displayMStr)
+    elif(setInHours < 5088):
+        displayYear = year
+        displayMonth = 7
+        displayDay = math.floor(setInHours/24)+1
+        displayHr = math.floor(setInHours-((displayDay-1)*24))
+        displayMin = math.floor((setInHours-(((displayDay-1)*24)+displayHr))*60)
+        displayMStr = str(displayMin)
+        if (displayMin<10):
+            displayMStr = "0" + str(displayMin)
+        SETLabel.config(text="START ESCAPE TIME:\n " + str(displayMonth) + "-" + str(displayDay-(31+28+31+30+31+30)) + "-" + str(displayYear) + " " + str(displayHr) + ":" + displayMStr)
+    elif(setInHours < 5832):
+        displayYear = year
+        displayMonth = 8
+        displayDay = math.floor(setInHours/24)+1
+        displayHr = math.floor(setInHours-((displayDay-1)*24))
+        displayMin = math.floor((setInHours-(((displayDay-1)*24)+displayHr))*60)
+        displayMStr = str(displayMin)
+        if (displayMin<10):
+            displayMStr = "0" + str(displayMin)
+        SETLabel.config(text="START ESCAPE TIME:\n " + str(displayMonth) + "-" + str(displayDay-(31+28+31+30+31+30+31)) + "-" + str(displayYear) + " " + str(displayHr) + ":" + displayMStr)
+    elif(setInHours < 6552):
+        displayYear = year
+        displayMonth = 9
+        displayDay = math.floor(setInHours/24)+1
+        displayHr = math.floor(setInHours-((displayDay-1)*24))
+        displayMin = math.floor((setInHours-(((displayDay-1)*24)+displayHr))*60)
+        displayMStr = str(displayMin)
+        if (displayMin<10):
+            displayMStr = "0" + str(displayMin)
+        SETLabel.config(text="START ESCAPE TIME:\n " + str(displayMonth) + "-" + str(displayDay-(31+28+31+30+31+30+31+31)) + "-" + str(displayYear) + " " + str(displayHr) + ":" + displayMStr)
+    elif(setInHours < 7296):
+        displayYear = year
+        displayMonth = 10
+        displayDay = math.floor(setInHours/24)+1
+        displayHr = math.floor(setInHours-((displayDay-1)*24))
+        displayMin = math.floor((setInHours-(((displayDay-1)*24)+displayHr))*60)
+        displayMStr = str(displayMin)
+        if (displayMin<10):
+            displayMStr = "0" + str(displayMin)
+        SETLabel.config(text="START ESCAPE TIME:\n " + str(displayMonth) + "-" + str(displayDay-(31+28+31+30+31+30+31+31+30)) + "-" + str(displayYear) + " " + str(displayHr) + ":" + displayMStr)
+    elif(setInHours < 8016):
+        displayYear = year
+        displayMonth = 11
+        displayDay = math.floor(setInHours/24)+1
+        displayHr = math.floor(setInHours-((displayDay-1)*24))
+        displayMin = math.floor((setInHours-(((displayDay-1)*24)+displayHr))*60)
+        displayMStr = str(displayMin)
+        if (displayMin<10):
+            displayMStr = "0" + str(displayMin)
+        SETLabel.config(text="START ESCAPE TIME:\n " + str(displayMonth) + "-" + str(displayDay-(31+28+31+30+31+30+31+31+30+31)) + "-" + str(displayYear) + " " + str(displayHr) + ":" + displayMStr)
+    elif(setInHours < 8760):
+        displayYear = year
+        displayMonth = 12
+        displayDay = math.floor(setInHours/24)+1
+        displayHr = math.floor(setInHours-((displayDay-1)*24))
+        displayMin = math.floor((setInHours-(((displayDay-1)*24)+displayHr))*60)
+        displayMStr = str(displayMin)
+        if (displayMin<10):
+            displayMStr = "0" + str(displayMin)
+        SETLabel.config(text="START ESCAPE TIME:\n " + str(displayMonth) + "-" + str(displayDay-(31+28+31+30+31+30+31+31+30+31+30)) + "-" + str(displayYear) + " " + str(displayHr) + ":" + displayMStr)
+    else:
+        year = nextYear
+        newHours = setInHours-8760
+        if(newHours < 744):
+            displayYear = year
+            displayMonth = 1
+            displayDay = math.floor(setInHours/24)+1
+            displayHr = math.floor(setInHours-((displayDay-1)*24))
+            displayMin = math.floor((setInHours-(((displayDay-1)*24)+displayHr))*60)
+            displayMStr = str(displayMin)
+            if (displayMin<10):
+                displayMStr = "0" + str(displayMin)
+            SETLabel.config(text="START ESCAPE TIME:\n " + str(displayMonth) + "-" + str(displayDay - 365) + "-" + str(displayYear) + " " + str(displayHr) + ":" + displayMStr)
+        elif(newHours < 1416):
+            displayYear = year
+            displayMonth = 2
+            displayDay = math.floor(setInHours/24)+1
+            displayHr = math.floor(setInHours-((displayDay-1)*24))
+            displayMin = math.floor((setInHours-(((displayDay-1)*24)+displayHr))*60)
+            displayMStr = str(displayMin)
+            if (displayMin<10):
+                displayMStr = "0" + str(displayMin)
+            SETLabel.config(text="START ESCAPE TIME:\n " + str(displayMonth) + "-" + str(displayDay-(31+365)) + "-" + str(displayYear) + " " + str(displayHr) + ":" + displayMStr)
+    
+        
+   
 
 #Style welcome window
 
 welcomeLabel = Label(welcomeRoot, text="Welcome to the SET Calculator!")
-welcomeLabel.grid(row=0, column=0)
+welcomeLabel.grid(row=0, column=0, columnspan=5)
 welcomeLabel.config(font=('Fixedsys',20), fg='darkblue')
 
 wl2 = Label(welcomeRoot, text="This calculator determines Start Escape Time (SET). SET is the latest possible\ntime for fit survivors to commence escape in a Disabled Submarine (DISSUB).")
-wl2.grid(row=1, column=0, pady=10)
+wl2.grid(row=1, column=0, pady=10, columnspan=5)
 wl2.config(font=('Fixedsys',13))
 
 wl3 = Label(welcomeRoot, text="This device features a SET calculator, spreadsheet, and graph to track, store,\n and predict atmospheric trends and data.")
-wl3.grid(row=2, column=0, pady=10)
+wl3.grid(row=2, column=0, columnspan=5)
 wl3.config(font=('Fixedsys',13))
 
 wl4 = Label(welcomeRoot, text="For additional information, refer to the 'Help' button.")
-wl4.grid(row=3, column=0, pady=10)
+wl4.grid(row=3, column=0, pady=10, columnspan=5)
 wl4.config(font=('Fixedsys',13))
+
+wl5 = Label(welcomeRoot, text="Please enter the current time (military time) and date before proceeding.")
+wl5.grid(row=4, column=0, pady=10, columnspan=5)
+wl5.config(font=('Fixedsys',13))
+
+wl6 = Label(welcomeRoot, text="Time (hr MIL, 00-23):")
+wl6.grid(row=5, column=0, pady=10)
+wl6.config(font=('Fixedsys',10))
+
+milhrEnter = Entry(welcomeRoot, width=10)
+milhrEnter.grid(row=5, column=1, ipady=10, pady=3)
+milhrEnter.config(font=('Fixedsys', 10))
+
+wl7 = Label(welcomeRoot, text="Time (min, 0-60):")
+wl7.grid(row=5, column=2, pady=10)
+wl7.config(font=('Fixedsys',10))
+
+minEnter = Entry(welcomeRoot, width=10)
+minEnter.grid(row=5, column=4, ipady=10, pady=3)
+minEnter.config(font=('Fixedsys', 10))
+
+wl8 = Label(welcomeRoot, text="Day (1-31):")
+wl8.grid(row=6, column=0, pady=10)
+wl8.config(font=('Fixedsys',10))
+
+dayEnter = Entry(welcomeRoot, width=10)
+dayEnter.grid(row=6, column=1, ipady=10, pady=3)
+dayEnter.config(font=('Fixedsys', 10))
+
+wl9 = Label(welcomeRoot, text="Month (1-12):")
+wl9.grid(row=6, column=2, pady=10)
+wl9.config(font=('Fixedsys',10))
+
+monthEnter = Entry(welcomeRoot, width=10)
+monthEnter.grid(row=6, column=4, ipady=10, pady=3)
+monthEnter.config(font=('Fixedsys', 10))
+
+wl10 = Label(welcomeRoot, text="Year:")
+wl10.grid(row=7, column=0, pady=10)
+wl10.config(font=('Fixedsys',10))
+
+yearEnter = Entry(welcomeRoot, width=10)
+yearEnter.grid(row=7, column=1, ipady=10, pady=3)
+yearEnter.config(font=('Fixedsys', 10))
+
+wEnterButton = Button(welcomeRoot, text="Enter", command=welEnterClick)
+wEnterButton.config(font=('Fixedsys', 15), fg='darkblue')
+wEnterButton.grid(column=2, row=7, columnspan=3)
 
 welcomeButton = Button(welcomeRoot, text="Close", command=welcomeRoot.destroy)
 welcomeButton.config(font=('Fixedsys', 20), fg='darkblue')
-welcomeButton.grid(column=0, row=4, pady=20)
+welcomeButton.grid(column=0, row=8, columnspan=5)
 
 
 #Label and enter box for the variables on the input frame
@@ -468,7 +740,7 @@ floodEnter.grid(row=1, column=3, ipady=10, pady=3)
 floodEnter.config(font=('Fixedsys', 10))
 
 #Temperature:
-tempLabel = Label(frame1, text="Temperature: ")
+tempLabel = Label(frame1, text="Temperature (F): ")
 tempLabel.grid(row=2, column=2)
 tempLabel.config(font=('Fixedsys', 15))
 tempEnter = Entry(frame1, width=10)
@@ -726,15 +998,9 @@ def enterClick():
                 coSETLabel.config(text="CO2 start escape time:\n " + str(coSETHr) + " hr " + str(coSETMin) + " min")
 
             if (oSET< coSET):
-                if (oSETDay > 0):
-                    SETLabel.config(text="O2 start escape time:\n " + str(oSETDay) + " day " + str(oSETHr) + " hr")
-                else:
-                    SETLabel.config(text="O2 start escape time:\n " + str(oSETHr) + " hr " + str(oSETMin) + " min")
+                setDisplay(oSET)
             else:
-                if (coSETDay > 0):
-                    SETLabel.config(text="CO2 start escape time:\n " + str(coSETDay) + " day " + str(coSETHr) + " hr")
-                else:
-                    SETLabel.config(text="CO2 start escape time:\n " + str(coSETHr) + " hr " + str(coSETMin) + " min")
+                setDisplay(coSET)
 
 
             #Checks if all survivors are wearing EABs. If not, the pressure start escape time is not calculated 
@@ -754,10 +1020,7 @@ def enterClick():
                     eabSETLabel.config(text="Pressure start escape time:\n " + str(eabSETHr) + " hr " + str(eabSETMin) + " min")
                 
                 if (eabSET<oSET and eabSET<coSET):
-                    if (eabSETDay > 0):
-                        SETLabel.config(text="Pressure start escape time:\n " + str(eabSETDay) + " day " + str(eabSETHr) + " hr")
-                    else:
-                        SETLabel.config(text="Pressure start escape time:\n " + str(eabSETHr) + " hr " + str(eabSETMin) + " min")
+                    setDisplay(eabSET)
             else:
                 eabSET="NA"
                 eabSETLabel.config(eabSETLabel.config(text="EABs start escape time:\n N/A"))
