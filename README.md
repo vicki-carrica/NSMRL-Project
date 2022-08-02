@@ -72,3 +72,4 @@ pip install numpy
 ### Add GUI.py to an IDE
 
 We used Visual Studio Code as the Integrated Development Environment (IDE) but any IDE that supports Python 3 should work as well. 
+For VS Code installation instructions, see https://docs.microsoft.com/en-us/visualstudio/install/install-visual-studio?view=vs-2022
