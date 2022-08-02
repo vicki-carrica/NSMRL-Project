@@ -44,7 +44,7 @@ This file contains the calculations for survival time, start escape time, and ot
 </br>
 **Java files**
 </br>
-These files have the same function as the Python files but are less developed and are written in Java instead.
+These files have the same function as the Python files but are less developed and are written in Java instead. Python files should be used for future development.
 
 ## Getting Started
 
@@ -68,3 +68,7 @@ python -m pip install -U matplotlib
 pip install numpy
 ```
   - For more information, see https://numpy.org/install/
+
+### Add GUI.py to an IDE
+
+We used Visual Studio Code as the Integrated Development Environment (IDE) but any IDE that supports Python 3 should work as well. 
