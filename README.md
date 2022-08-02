@@ -68,5 +68,3 @@ python -m pip install -U matplotlib
 pip install numpy
 ```
   - For more information, see https://numpy.org/install/
- 
- ## Features
