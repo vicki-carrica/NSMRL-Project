@@ -21,7 +21,7 @@ Programmer
 Contact: vickicarrica@yahoo.com
 
 ### The Problem
-Start Escape Time (SET) is the latest possible time that sailors on a DISSUB can commence escape. Sailors would rather be rescued than be forced to escape to a method of calculating SET is critical in these cases.
+Start Escape Time (SET) is the latest possible time that sailors on a DISSUB can commence escape. Sailors would rather be rescued than be forced to escape to a method of calculating SET is critical in these cases. Oxygen SET, carbon dioxide SET, and pressure SET can be calculated and the absolute SET is the lowest of the Start Escape Times.
 </br>
 The current method is the Guard Book, a lengthy book that includes many steps and complicated equations and tables. The Guard Book is prone to human error and does not have high accuracy. This project was designed to better the method of the Guard Book and create a calculation device that has fewer steps, is less prone to human error, and is quicker.
 </br>
@@ -72,4 +72,19 @@ pip install numpy
 ### Add GUI.py to an IDE
 
 We used Visual Studio Code as the Integrated Development Environment (IDE) but any IDE that supports Python 3 should work as well. 
+</br>
 For VS Code installation instructions, see https://docs.microsoft.com/en-us/visualstudio/install/install-visual-studio?view=vs-2022
+</br>
+Once you have an IDE, download GUI.py to your computer and open it using the ctrl + O shortcut
+
+## Usage
+
+Our SET calculator was designed to replace the tables, calculations, and graphs in the current Guard Book. It features an input tab, a graph tab, and a spreadsheet tab as well as a welcome screen.
+
+### Welcome Screen
+
+Upon opening the SET Calculator, you will see a welcome screen that explains the basics of the application as well as prompts users to input time (military time) and the date. The time and date are input so that SET can be displayed as the time and date that escape must commense. There is an "Enter" button to input the time and date and a close button that closes the welcome screen.
+
+### Input Tab
+
+The default tab is the input tab. This tab prompts users to enter the number of fit survivors (sailors that have full use of both arms and can stand upright in the escape trunk), the number of unfit survivors, chlorate candles (that release oxygen), ExtendAir kits (that intake carbon dioxide), pressure in fsw, the percentage of the escape trunk flooded, the temperature in Fahrenheit, the concentration of both oxygen and carbon dioxide in %SEV (Surface Equivalence Value), and the number of survivors that have EABs. It has an 'Enter' button that calculates the SET and a "Plot Data" button which plots all of the data 
