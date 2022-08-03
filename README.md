@@ -118,5 +118,7 @@ The 'Plot Data' button records the pressure, oxygen concentration, and carbon di
 </br>
 **Battery**
 </br>
-The 'Help' button causes a pop up to display input information explaining what each input means as well as instructions on how to use the application. 
+The battery percentage is displayed directly under the 'Help' button as both a number and a slider. The number text turns green when it the battery and plugged in and charging and black otherwise.
 </br>
+
+### Graph Tab
