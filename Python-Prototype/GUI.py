@@ -1416,6 +1416,11 @@ batteryBar['value'] = 20
 def updateData():
         batteryBar['value'] = getBattery.GetBattery()
         batteryLabel['text'] = update_batteryLabel()
+        battPlugged = getBattery.GetBatteryPlugged()
+        if (battPlugged):
+            s.configure('bar.Vertical.TProgressbar', troughcolor ='white',background='green')
+        else:
+            s.configure('bar.Vertical.TProgressbar', troughcolor ='white',background='darkblue')
         root.after(2000, updateData)
 
 def update_batteryLabel():
