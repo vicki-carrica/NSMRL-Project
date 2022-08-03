@@ -1413,24 +1413,24 @@ batteryBar = ttk.Progressbar(frame1, style='bar.Vertical.TProgressbar', orient='
 batteryBar.grid(row=2, column=5, padx=0, pady=0, rowspan=3)
 batteryBar['value'] = 20
 
+batteryLabel = Label(frame1, text="battery")
+batteryLabel.grid(row= 5, column = 5)
+batteryLabel.config(font=('Fixedsys', 10))
+
 def updateData():
         batteryBar['value'] = getBattery.GetBattery()
         batteryLabel['text'] = update_batteryLabel()
         battPlugged = getBattery.GetBatteryPlugged()
         if (battPlugged):
-            s.configure('bar.Vertical.TProgressbar', troughcolor ='white',background='green')
-            s.configure('Treeview.Heading', font=('Fixedsys','15'))
+            batteryLabel.config(color='green')
         else:
-            s.configure('bar.Vertical.TProgressbar', troughcolor ='white',background='darkblue')
-            s.configure('Treeview.Heading', font=('Fixedsys','15'))
+            batteryLabel.config(color='black')
         root.after(2000, updateData)
 
 def update_batteryLabel():
     return f"Battery{batteryBar['value']}%"
 
-batteryLabel = Label(frame1, text="battery")
-batteryLabel.grid(row= 5, column = 5)
-batteryLabel.config(font=('Fixedsys', 10))
+
 
 updateData()
 root.mainloop()
