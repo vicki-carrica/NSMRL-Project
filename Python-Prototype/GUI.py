@@ -825,9 +825,9 @@ SETLabel.grid(row=8, column=2, columnspan=2)
 SETLabel.config(font=('Fixedsys', 12))
 
 #Creates figures to place graphs on
-fO = Figure(figsize=(9,4.5), dpi=80) 
-fCO = Figure(figsize=(9,4.5), dpi=80) 
-fP = Figure(figsize=(9,4.5), dpi=80)
+fO = Figure(figsize=(10,4.2), dpi=80) 
+fCO = Figure(figsize=(10,4.2), dpi=80) 
+fP = Figure(figsize=(10,4.2), dpi=80)
 
 #Adds oxygen plot to the figure with graph titles and y limits to match the Guard Book's axis labels (13%-25%)
 o = fO.add_subplot(111)
@@ -896,7 +896,7 @@ data.heading("Carbon Dioxide %SEV", text="Carbon Dioxide (%SEV)", anchor=W)
 data.heading("Pressure FSW", text="Pressure (FSW)", anchor=W)
 
 #Adds the spreadsheet onto the frame
-data.grid(column=0, row=0, ipadx=300, ipady=75, columnspan=2)
+data.grid(column=0, row=0, ipadx=280, ipady=67, columnspan=2)
 
 def enterClick():
     #This function collects the data from the enter boxes and displays the calculated survival times/start escape times
