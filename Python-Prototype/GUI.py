@@ -884,7 +884,7 @@ data['columns'] = ("Time", "Oxygen %SEV", "Carbon Dioxide %SEV", "Pressure FSW")
 data.column("#0", width=0, stretch=NO) #Sets column "0" (automatic column) to have no width- essentially deletes the column
 
 #Configures the columns:
-data.column("Time", anchor=W, width=25, minwidth=10)
+data.column("Time", anchor=W, width=25, minwidth=10, maxwidth=25)
 data.column("Oxygen %SEV", anchor=W, width=50, minwidth=25)
 data.column("Carbon Dioxide %SEV", anchor=W, width=100, minwidth=50)
 data.column("Pressure FSW", anchor=W, width=50, minwidth=25)
