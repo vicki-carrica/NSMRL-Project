@@ -1419,7 +1419,7 @@ def updateData():
         root.after(2000, updateData)
 
 def update_batteryLabel():
-    return f"Battery Percentage: {batteryBar['value']}%"
+    return f"battery{batteryBar['value']}%"
 
 batteryLabel = Label(frame1, text="battery")
 batteryLabel.grid(row= 5, column = 5)
