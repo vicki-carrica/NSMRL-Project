@@ -480,10 +480,10 @@ def welEnterClick():
         enWarn = Toplevel(root)
         enWarn.title("VALUE ERROR")
         enWarn.geometry("400x200")
-        ewLabel = Label(plotWarn, text="Invalid Inputs\nDo not leave fields blank\n")
+        ewLabel = Label(enWarn, text="Invalid Inputs\nDo not leave fields blank\n")
         ewLabel.config(font=('Fixedsys', 15))
         ewLabel.pack()
-        ewButt = Button(plotWarn, text="Close", command=plotWarn.destroy)
+        ewButt = Button(enWarn, text="Close", command=enWarn.destroy)
         ewButt.config(font=('Fixedsys', 20), fg='darkblue')
         ewButt.pack()
 
