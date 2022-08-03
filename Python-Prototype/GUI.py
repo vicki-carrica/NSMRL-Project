@@ -133,7 +133,7 @@ def hourBreathing(fit, unfit):
 
 def calcVBreath(percentFlooded, fit, pressure):
     #This function calculates the volume of breathable air in the compartment after flooding
-    vCompt = (100-percentFlooded)* pressure* 62800/100
+    vCompt = (100-percentFlooded)* 62800/100
     vBreath = vCompt - 214 - (fit*53.5)
     return vBreath
 
@@ -180,15 +180,17 @@ def eabStartEscapeTime(fit, unfit, pFinal, volumeBreath, breathingHr):
     #This function calculates the start escape time based on pressure
     #Start escape time is the amount of time until escapes must begin 
     survivors = fit + unfit
+    print("pressure final: " + str(pFinal))
     numerator = (1.697 - pFinal)*volumeBreath-(breathingHr*20.0)
     denominator = survivors*20.0
     eabStartTime = numerator/denominator
     return eabStartTime
 
-def pFinal(percentFlood, pressure, volumeBreath):
+def pFinal(percentFlood, pressure, volumeBreath, fitSurv):
     #This function calculates the final pressure in the submarine after escapes 
     volumeCompt = (100-percentFlood)*62800/100
-    airAddedByEscapes = 8*pressure*(144+3.33)
+    airAddedByEscapes = fitSurv*pressure*(72+3.33)
+    print("air added by escapes: " + str(airAddedByEscapes))
     pFinal = ((volumeCompt)*pressure+airAddedByEscapes)/volumeBreath
     return pFinal
 
@@ -376,8 +378,9 @@ coX = []
 pY = []
 pX = []
 
-#Declaration of the start time as the current time (for the x axis of the graphs)
+#Declaration of the start time as the current time (for the x axis of the graphs) for both the graph (start) and overall time (timeStart)
 start = time.time()
+timeStart = time.time()
 
 #counter variables to count the number of times buttons are pressed
 counter = 0
@@ -408,6 +411,8 @@ def timeInHrs():
     #This function turns hours, days, and months into a single value (hours out of 8760 in a year)
     global day
     global month
+    global hr 
+    global min
     global day365
     global hour8760
     if (month==1):
@@ -435,7 +440,7 @@ def timeInHrs():
     elif(month==12):
         day365 = 31+28+31+30+31+30+31+31+30+31+30+day
 
-    hour8760 = day365*24 -24
+    hour8760 = (day365*24 -24) + hr + (min/60)
 
 def welEnterClick():
     #This function stores the values of the date and time to global variables that are later used in start escape time calculation
@@ -445,13 +450,23 @@ def welEnterClick():
     global month
     global year 
     global nextYear
+
+    #starts elapsed time
+    timeStart = time.time()
+    
+    #sets time and date as inputs 
     hr = int(milhrEnter.get())
     min = int(minEnter.get())
     day = int(dayEnter.get())
     month = int(monthEnter.get())
     year = int(yearEnter.get())
+
+    #declares what the next year is 
     nextYear = year+1
+
+    #finds the time in hours 
     timeInHrs()
+
     print(day365)
     print(hour8760) 
 
@@ -469,7 +484,7 @@ def setDisplay(setHours):
     displayHr = int
     displayMin = int
 
-
+    print("SET Hours: " + str(setHours))
     setInHours = hour8760 + setHours
     if(setInHours < 744):
         displayYear = year
@@ -895,7 +910,17 @@ def enterClick():
             oConc = float(oxEnter.get())
             coConc = float(coEnter.get())
             eabs = int(eabsEnter.get())
+            global hour8760
+            global timeStart
             
+            #tracks the time elapsed
+            currentTime = time.time()
+            timeElapsed = (currentTime - timeStart)/3600
+            print("time elapsed: " + str(timeElapsed))
+            hour8760 += timeElapsed
+            timeStart = time.time()
+
+
             #To track whether the inputs are valid
             warnText = ""
             validInputs = True
@@ -971,7 +996,7 @@ def enterClick():
 
             vBreath = calcVBreath(flood, fitSurv, presATA) #stores the volume of breathable air
 
-            finalP = pFinal(flood, presATA, vBreath) #stores final pressure
+            finalP = pFinal(flood, presATA, vBreath, fitSurv) #stores final pressure
 
             oSET = oStartEscapeTime(candles, fitSurv, unfitSurv, flood, oConc, vBreath, temp, remainingHr) #stores oxygen start escape time
             #Converts hours (decimal) to days (whole number) and hours (whole number) 
@@ -988,6 +1013,14 @@ def enterClick():
             #Displays the survival/start escape times onto the labels. ST was omitted to save space but can be added back by uncommenting lines
             #oSTLabel.config(text="Oxygen survival time:\n " + str(oSTDay) + " day " + str(oSTHr) + " hr")
             #coSTLabel.config(text="Carbon dioxide survival time:\n " + str(coSTDay) + " day " + str(coSTHr) + " hr")
+            if (oSET<0):
+                oSETLabel.config(text="O2 start escape time:\n " + str(0) + " day " + str(0) + " hr")
+                setDisplay(0)
+
+            if(coSET<0):
+                coSETLabel.config(text="CO2 start escape time:\n " + str(0) + " day " + str(0) + " hr")
+                setDisplay(0)
+            
             if (oSETDay > 0):
                 oSETLabel.config(text="O2 start escape time:\n " + str(oSETDay) + " day " + str(oSETHr) + " hr")
             else:
@@ -1006,21 +1039,26 @@ def enterClick():
             #Checks if all survivors are wearing EABs. If not, the pressure start escape time is not calculated 
             if eabs==(fitSurv+unfitSurv):
                 eabSET = eabStartEscapeTime(fitSurv, unfitSurv, finalP, vBreath, remainingHr) #stores eab start escape time
+                print("EABs SET: " + str(eabSET))
                 #Converts hours (decimal) to days (whole number) and hours (whole number)
-                print(eabSET)
                 eabSETDay = math.floor(eabSET/24)
                 eabSETHr = math.floor(eabSET-24*eabSETDay)
                 eabSETMin = math.floor((eabSET-(24*eabSETDay + eabSETHr))*60)
-                print(eabSETMin)
+                print("EABs SET: " + str(eabSETDay) + " day " + str(eabSETHr) + " hr " + str(eabSETMin) + " min")
 
                 #Displays the start escape times onto the label 
                 if (eabSETDay > 0):
                     eabSETLabel.config(text="Pressure start escape time:\n " + str(eabSETDay) + " day " + str(eabSETHr) + " hr")
-                else:
+                elif (eabSETDay == 0):
                     eabSETLabel.config(text="Pressure start escape time:\n " + str(eabSETHr) + " hr " + str(eabSETMin) + " min")
+                else:
+                    eabSETLabel.config(text="Pressure start escape time:\n " + "0" + " hr " + "0" + " min")
                 
-                if (eabSET<oSET and eabSET<coSET):
+                if (eabSET<0):
+                    setDisplay(0)
+                elif (eabSET<oSET and eabSET<coSET):
                     setDisplay(eabSET)
+
             else:
                 eabSET="NA"
                 eabSETLabel.config(eabSETLabel.config(text="EABs start escape time:\n N/A"))
