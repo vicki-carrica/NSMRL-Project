@@ -1366,5 +1366,8 @@ undoButt = Button(frame3, text="Undo", fg='darkgrey', command=undoClick, padx=10
 undoButt.config(font=('Fixedsys', 10), bg='lightgrey')
 undoButt.grid(column=0, row=1)
 
+batteryBar = ttk.Progressbar(frame1, orient='vertical',mode='determinate',length=140)
+batteryBar.grid(row=2, column=5, padx=0, pady=0)
+batteryBar['value'] = 20
 
 root.mainloop()
