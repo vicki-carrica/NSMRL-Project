@@ -94,17 +94,30 @@ Our SET calculator was designed to replace the tables, calculations, and graphs 
 
 ### Welcome Screen
 
-Upon opening the SET Calculator, you will see a welcome screen that explains the basics of the application as well as prompts users to input time (military time) and the date. The time and date are input so that SET can be displayed as the time and date that escape must commense. There is an "Enter" button to input the time and date and a close button that closes the welcome screen.
+Upon opening the SET Calculator, you will see a welcome screen that explains the basics of the application as well as prompts users to input time (military time) and the date. The time and date are input so that SET can be displayed as the time and date that escape must commense. There is an 'Enter and Close' button that records the time and date and closes the Welcome Screen. 
 
 ### Input Tab
 
-The default tab is the input tab.
+The default tab is the input tab. This tab features inputs for submarine data, a 'Help' button, an 'Enter' button, a 'Plot Data' button, and the battery percentage. 
+
 </br>
 **Inputs**
 </br>
 This tab prompts users to enter the number of fit survivors (sailors that have full use of both arms and can stand upright in the escape trunk), the number of unfit survivors, chlorate candles (that release oxygen), ExtendAir kits (that intake carbon dioxide), pressure in fsw, the percentage of the escape trunk flooded, the temperature in Fahrenheit, the concentration of both oxygen and carbon dioxide in %SEV (Surface Equivalence Value), and the number of survivors that have EABs.
 </br>
+**Help**
+</br>
+The 'Help' button causes a pop up to display input information explaining what each input means as well as instructions on how to use the application. 
+</br>
 **Enter**
 </br>
 The 'Enter' button accepts or rejects the inputs based on a set of parameters (for examples, the number of survivors cannot be negative and percentages cannot exceed 100) and displays the oxygen, carbon dioxide, and pressure SETs as well as the absolute SET as a date and time (for example, 1-1-2022 1:00). 
+</br>
+**Plot Data**
+</br>
+The 'Plot Data' button records the pressure, oxygen concentration, and carbon dioxide concentration and adds the value to an array that is displayed on a spreadsheet (on the 'Data' tab) and is plotted on a graph once 2+ data points have been plotted (on the 'Graph' tab)
+</br>
+**Battery**
+</br>
+The 'Help' button causes a pop up to display input information explaining what each input means as well as instructions on how to use the application. 
 </br>
