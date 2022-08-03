@@ -896,7 +896,7 @@ data.heading("Carbon Dioxide %SEV", text="Carbon Dioxide (%SEV)", anchor=W)
 data.heading("Pressure FSW", text="Pressure (FSW)", anchor=W)
 
 #Adds the spreadsheet onto the frame
-data.grid(column=0, row=0, ipadx=250, ipady=75, columnspan=2)
+data.grid(column=0, row=0, ipadx=300, ipady=75, columnspan=2)
 
 def enterClick():
     #This function collects the data from the enter boxes and displays the calculated survival times/start escape times
@@ -1417,10 +1417,16 @@ def updateData():
         batteryBar['value'] = getBattery.GetBattery()
         batteryLabel['text'] = update_batteryLabel()
         battPlugged = getBattery.GetBatteryPlugged()
-        #if (battPlugged):
-        #    s.configure('bar.Vertical.TProgressbar', troughcolor ='white',background='green')
-        #else:
-        #    s.configure('bar.Vertical.TProgressbar', troughcolor ='white',background='darkblue')
+        if (battPlugged):
+            s.configure('bar.Vertical.TProgressbar', troughcolor ='white',background='green')
+            s.configure('TNotebook.Tab', font=('Fixedsys','15'))
+            s.configure('Treeview', font=('Fixedsys','10'))
+            s.configure('Treeview.Heading', font=('Fixedsys','15'))
+        else:
+            s.configure('bar.Vertical.TProgressbar', troughcolor ='white',background='green')
+            s.configure('TNotebook.Tab', font=('Fixedsys','15'))
+            s.configure('Treeview', font=('Fixedsys','10'))
+            s.configure('bar.Vertical.TProgressbar', troughcolor ='white',background='darkblue')
         root.after(2000, updateData)
 
 def update_batteryLabel():
