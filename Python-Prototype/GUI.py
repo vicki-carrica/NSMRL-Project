@@ -1419,17 +1419,20 @@ def updateData():
         battPlugged = getBattery.GetBatteryPlugged()
         if (battPlugged):
             s.configure('bar.Vertical.TProgressbar', troughcolor ='white',background='green')
-            s.configure('TNotebook.Tab', font=('Fixedsys','15'))
-            s.configure('Treeview', font=('Fixedsys','10'))
-            s.configure('Treeview.Heading', font=('Fixedsys','15'))
+            #Configures the columns:
             data.column("Time", anchor=W, width=25, minwidth=10)
             data.column("Oxygen %SEV", anchor=W, width=50, minwidth=25)
             data.column("Carbon Dioxide %SEV", anchor=W, width=100, minwidth=50)
             data.column("Pressure FSW", anchor=W, width=50, minwidth=25)
+
+            #Configures the headings:
             data.heading("Time", text="Time (min)", anchor=W)
             data.heading("Oxygen %SEV", text="Oxygen (%SEV)", anchor=W)
             data.heading("Carbon Dioxide %SEV", text="Carbon Dioxide (%SEV)", anchor=W)
             data.heading("Pressure FSW", text="Pressure (FSW)", anchor=W)
+
+            #Adds the spreadsheet onto the frame
+            data.grid(column=0, row=0, ipadx=300, ipady=75, columnspan=2)
         else:
             s.configure('bar.Vertical.TProgressbar', troughcolor ='white',background='green')
             s.configure('TNotebook.Tab', font=('Fixedsys','15'))
