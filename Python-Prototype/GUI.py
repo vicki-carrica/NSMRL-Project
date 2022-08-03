@@ -1422,9 +1422,9 @@ def updateData():
         batteryLabel['text'] = update_batteryLabel()
         battPlugged = getBattery.GetBatteryPlugged()
         if (battPlugged):
-            batteryLabel.config(color='green')
+            batteryLabel.config(fg='green')
         else:
-            batteryLabel.config(color='black')
+            batteryLabel.config(fg='black')
         root.after(2000, updateData)
 
 def update_batteryLabel():
