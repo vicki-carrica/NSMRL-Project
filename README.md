@@ -36,15 +36,26 @@ This repository contains the source code for both the Java and Python prototypes
 ### Files
 **GUI.py**
 </br>
-This file contains all of the code for the Graphical User Interface and is file that was ultimately used in the calculator. 
+This file contains all of the code for the Graphical User Interface and the math. 
+</br>
+**getBattery.py**
+</br>
+This file contains the code for obtaining the battery percentage and whether the battery is charging. 
+</br>
+**batteryGUI.py and battery-info.py**
+</br>
+These files were used to test obtaining battery information and were not used in the actual calculator. 
 </br>
 **SETCalculator.py**
 </br>
-This file contains the calculations for survival time, start escape time, and other formulas found on the Guard Book spreadsheet (contact us for a copy). 
+This file contains the calculations for survival time, start escape time, and other formulas found on the Guard Book spreadsheet (contact us for a copy) and was integrated into GUI.py so is not needed for the calculator. 
 </br>
 **Java files**
 </br>
 These files have the same function as the Python files but are less developed and are written in Java instead. Python files should be used for future development.
+</br>
+</br>
+GUI.py and getBattery.py were the only files that were ultimately used in the application and are the only files that must be downloaded for the application to function. 
 
 ## Getting Started
 
@@ -69,13 +80,13 @@ pip install numpy
 ```
   - For more information, see https://numpy.org/install/
 
-### Add GUI.py to an IDE
+### Add GUI.py and getBattery.py to an IDE
 
 We used Visual Studio Code as the Integrated Development Environment (IDE) but any IDE that supports Python 3 should work as well. 
 </br>
 For VS Code installation instructions, see https://docs.microsoft.com/en-us/visualstudio/install/install-visual-studio?view=vs-2022
 </br>
-Once you have an IDE, download GUI.py to your computer and open it using the ctrl + O shortcut
+Once you have an IDE, download GUI.py and getBattery.py to your computer and open the files using the ctrl + O shortcut
 
 ## Usage
 
@@ -87,4 +98,13 @@ Upon opening the SET Calculator, you will see a welcome screen that explains the
 
 ### Input Tab
 
-The default tab is the input tab. This tab prompts users to enter the number of fit survivors (sailors that have full use of both arms and can stand upright in the escape trunk), the number of unfit survivors, chlorate candles (that release oxygen), ExtendAir kits (that intake carbon dioxide), pressure in fsw, the percentage of the escape trunk flooded, the temperature in Fahrenheit, the concentration of both oxygen and carbon dioxide in %SEV (Surface Equivalence Value), and the number of survivors that have EABs. It has an 'Enter' button that calculates the SET and a "Plot Data" button which plots all of the data 
+The default tab is the input tab.
+</br>
+**Inputs**
+</br>
+This tab prompts users to enter the number of fit survivors (sailors that have full use of both arms and can stand upright in the escape trunk), the number of unfit survivors, chlorate candles (that release oxygen), ExtendAir kits (that intake carbon dioxide), pressure in fsw, the percentage of the escape trunk flooded, the temperature in Fahrenheit, the concentration of both oxygen and carbon dioxide in %SEV (Surface Equivalence Value), and the number of survivors that have EABs.
+</br>
+**Enter**
+</br>
+The 'Enter' button accepts or rejects the inputs based on a set of parameters (for examples, the number of survivors cannot be negative and percentages cannot exceed 100) and displays the oxygen, carbon dioxide, and pressure SETs as well as the absolute SET as a date and time (for example, 1-1-2022 1:00). 
+</br>
