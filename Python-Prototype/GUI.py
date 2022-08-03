@@ -26,6 +26,8 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
 import time
 import numpy as np
+import getBattery
+
 matplotlib.use("TkAgg")
 
 
@@ -1411,8 +1413,17 @@ batteryBar = ttk.Progressbar(frame1, style='bar.Vertical.TProgressbar', orient='
 batteryBar.grid(row=2, column=5, padx=0, pady=0, rowspan=3)
 batteryBar['value'] = 20
 
+def updateData():
+        batteryBar['value'] = getBattery.GetBattery()
+        batteryLabel['text'] = update_batteryLabel()
+        root.after(2000, updateData)
+
+def update_batteryLabel():
+    return f"Battery Percentage: {batteryBar['value']}%"
+
 batteryLabel = Label(frame1, text="battery")
 batteryLabel.grid(row= 5, column = 5)
 batteryLabel.config(font=('Fixedsys', 10))
 
+updateData()
 root.mainloop()
