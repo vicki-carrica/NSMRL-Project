@@ -476,6 +476,8 @@ def welEnterClick():
 
         print(day365)
         print(hour8760) 
+        
+        welcomeRoot.destroy()
     except ValueError:
         enWarn = Toplevel(root)
         enWarn.title("VALUE ERROR")
@@ -712,13 +714,9 @@ yearEnter = Entry(welcomeRoot, width=10)
 yearEnter.grid(row=7, column=1, ipady=10, pady=3)
 yearEnter.config(font=('Fixedsys', 10))
 
-wEnterButton = Button(welcomeRoot, text="Enter", command=welEnterClick)
-wEnterButton.config(font=('Fixedsys', 15), fg='darkblue')
-wEnterButton.grid(column=2, row=7, columnspan=3)
-
-welcomeButton = Button(welcomeRoot, text="Close", command=welcomeRoot.destroy)
-welcomeButton.config(font=('Fixedsys', 20), fg='darkblue')
-welcomeButton.grid(column=0, row=8, columnspan=5)
+wEnterButton = Button(welcomeRoot, text="Enter and Close", command=welEnterClick)
+wEnterButton.config(font=('Fixedsys', 20), fg='darkblue')
+wEnterButton.grid(column=0, row=8, columnspan=5)
 
 
 #Label and enter box for the variables on the input frame
