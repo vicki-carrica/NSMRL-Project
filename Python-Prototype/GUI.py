@@ -45,9 +45,12 @@ height = root.winfo_screenheight()
 
 #styles tkinter ttk attributes with the same font as the rest of the code
 s = ttk.Style(master=root)
+s.theme_use('clam')
 s.configure('TNotebook.Tab', font=('Fixedsys','15'))
 s.configure('Treeview', font=('Fixedsys','10'))
 s.configure('Treeview.Heading', font=('Fixedsys','15'))
+
+s.configure('bar.Vertical.TProgressbar', troughcolor ='white',background='darkblue')
 
 
 #creates the main notebook for "Input" (main screen where data is entered), "Graph", and "Data" (spreadsheet that tracks inputs) tabs.
@@ -1404,8 +1407,12 @@ undoButt = Button(frame3, text="Undo", fg='darkgrey', command=undoClick, padx=10
 undoButt.config(font=('Fixedsys', 10), bg='lightgrey')
 undoButt.grid(column=0, row=1)
 
-batteryBar = ttk.Progressbar(frame1, orient='vertical',mode='determinate',length=140)
-batteryBar.grid(row=2, column=5, padx=0, pady=0)
+batteryBar = ttk.Progressbar(frame1, style='bar.Vertical.TProgressbar', orient='vertical',mode='determinate',length=140)
+batteryBar.grid(row=2, column=5, padx=0, pady=0, rowspan=3)
 batteryBar['value'] = 20
+
+batteryLabel = Label(frame1, text="battery")
+batteryLabel.grid(row= 5, column = 5)
+batteryLabel.config(font=('Fixedsys', 10))
 
 root.mainloop()
