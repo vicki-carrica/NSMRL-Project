@@ -3,7 +3,8 @@ import socket
 import math
 
 #ip address and port of pisugar power manager api
-HOST = "127.0.0.1"
+#127.0.0.1 works only on pi, 192.168.1.2 allows you to run program on another computer that is on the same network
+HOST = "192.168.1.2"
 PORT = 8423
 
 
