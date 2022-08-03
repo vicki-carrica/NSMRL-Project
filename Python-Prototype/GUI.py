@@ -455,25 +455,37 @@ def welEnterClick():
     global month
     global year 
     global nextYear
-
-    #starts elapsed time
-    timeStart = time.time()
     
-    #sets time and date as inputs 
-    hr = int(milhrEnter.get())
-    min = int(minEnter.get())
-    day = int(dayEnter.get())
-    month = int(monthEnter.get())
-    year = int(yearEnter.get())
+    
+    try:
+        #starts elapsed time
+        timeStart = time.time()
 
-    #declares what the next year is 
-    nextYear = year+1
+        #sets time and date as inputs 
+        hr = int(milhrEnter.get())
+        min = int(minEnter.get())
+        day = int(dayEnter.get())
+        month = int(monthEnter.get())
+        year = int(yearEnter.get())
 
-    #finds the time in hours 
-    timeInHrs()
+        #declares what the next year is 
+        nextYear = year+1
 
-    print(day365)
-    print(hour8760) 
+        #finds the time in hours 
+        timeInHrs()
+
+        print(day365)
+        print(hour8760) 
+    except ValueError:
+        enWarn = Toplevel(root)
+        enWarn.title("VALUE ERROR")
+        enWarn.geometry("400x200")
+        ewLabel = Label(plotWarn, text="Invalid Inputs\nDo not leave fields blank\n")
+        ewLabel.config(font=('Fixedsys', 15))
+        ewLabel.pack()
+        ewButt = Button(plotWarn, text="Close", command=plotWarn.destroy)
+        ewButt.config(font=('Fixedsys', 20), fg='darkblue')
+        ewButt.pack()
 
 def setDisplay(setHours):
     #This function displays the start escape time as a date 
