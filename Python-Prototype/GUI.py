@@ -69,9 +69,9 @@ notebook.add(frame3, text="Data")
 #creates the notebook for the "Graph" frame and adds "Oxygen", "Carbon Dioxide", and "Pressure" tabs
 book2 = ttk.Notebook(frame2)
 book2.grid(row=0, column=0)
-oFrame = Frame(book2, width=700, height=430)
-coFrame = Frame(book2, width=700, height=430)
-pFrame = Frame(book2, width=700, height=430)
+oFrame = Frame(book2, width=750, height=380)
+coFrame = Frame(book2, width=750, height=380)
+pFrame = Frame(book2, width=750, height=380)
 
 book2.add(oFrame, text="Oxygen")
 book2.add(coFrame, text="Carbon Dioxide")
