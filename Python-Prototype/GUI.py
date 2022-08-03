@@ -1422,6 +1422,10 @@ def updateData():
             s.configure('TNotebook.Tab', font=('Fixedsys','15'))
             s.configure('Treeview', font=('Fixedsys','10'))
             s.configure('Treeview.Heading', font=('Fixedsys','15'))
+            data.heading("Time", text="Time (min)", anchor=W)
+            data.heading("Oxygen %SEV", text="Oxygen (%SEV)", anchor=W)
+            data.heading("Carbon Dioxide %SEV", text="Carbon Dioxide (%SEV)", anchor=W)
+            data.heading("Pressure FSW", text="Pressure (FSW)", anchor=W)
         else:
             s.configure('bar.Vertical.TProgressbar', troughcolor ='white',background='green')
             s.configure('TNotebook.Tab', font=('Fixedsys','15'))
