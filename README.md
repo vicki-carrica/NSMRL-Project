@@ -100,7 +100,6 @@ Upon opening the SET Calculator, you will see a welcome screen that explains the
 
 The default tab is the input tab. This tab features inputs for submarine data, a 'Help' button, an 'Enter' button, a 'Plot Data' button, and the battery percentage. 
 
-</br>
 **Inputs**
 </br>
 This tab prompts users to enter the number of fit survivors (sailors that have full use of both arms and can stand upright in the escape trunk), the number of unfit survivors, chlorate candles (that release oxygen), ExtendAir kits (that intake carbon dioxide), pressure in fsw, the percentage of the escape trunk flooded, the temperature in Fahrenheit, the concentration of both oxygen and carbon dioxide in %SEV (Surface Equivalence Value), and the number of survivors that have EABs.
