@@ -1419,14 +1419,17 @@ undoButt = Button(frame3, text="Undo", fg='darkgrey', command=undoClick, padx=10
 undoButt.config(font=('Fixedsys', 10), bg='lightgrey')
 undoButt.grid(column=0, row=1)
 
+#Declares Battery indicator
 batteryBar = ttk.Progressbar(frame1, style='bar.Vertical.TProgressbar', orient='vertical',mode='determinate',length=140)
 batteryBar.grid(row=2, column=5, padx=0, pady=0, rowspan=3)
 batteryBar['value'] = 20
 
+#Declares Battery Level label
 batteryLabel = Label(frame1, text="battery")
 batteryLabel.grid(row= 5, column = 5)
 batteryLabel.config(font=('Fixedsys', 10))
 
+#Function that updates battery bar and battery label
 def updateData():
         batteryBar['value'] = getBattery.GetBattery()
         batteryLabel['text'] = update_batteryLabel()
@@ -1437,10 +1440,11 @@ def updateData():
             batteryLabel.config(fg='black')
         root.after(2000, updateData)
 
+#Function that returns text to be displayed by battery label
 def update_batteryLabel():
     return f"Battery{batteryBar['value']}%"
 
 
-
 updateData()
+
 root.mainloop()
