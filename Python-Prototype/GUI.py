@@ -455,25 +455,39 @@ def welEnterClick():
     global month
     global year 
     global nextYear
-
-    #starts elapsed time
-    timeStart = time.time()
     
-    #sets time and date as inputs 
-    hr = int(milhrEnter.get())
-    min = int(minEnter.get())
-    day = int(dayEnter.get())
-    month = int(monthEnter.get())
-    year = int(yearEnter.get())
+    
+    try:
+        #starts elapsed time
+        timeStart = time.time()
 
-    #declares what the next year is 
-    nextYear = year+1
+        #sets time and date as inputs 
+        hr = int(milhrEnter.get())
+        min = int(minEnter.get())
+        day = int(dayEnter.get())
+        month = int(monthEnter.get())
+        year = int(yearEnter.get())
 
-    #finds the time in hours 
-    timeInHrs()
+        #declares what the next year is 
+        nextYear = year+1
 
-    print(day365)
-    print(hour8760) 
+        #finds the time in hours 
+        timeInHrs()
+
+        print(day365)
+        print(hour8760) 
+        
+        welcomeRoot.destroy()
+    except ValueError:
+        enWarn = Toplevel(root)
+        enWarn.title("VALUE ERROR")
+        enWarn.geometry("400x200")
+        ewLabel = Label(enWarn, text="Invalid Inputs\nDo not leave fields blank\n")
+        ewLabel.config(font=('Fixedsys', 15))
+        ewLabel.pack()
+        ewButt = Button(enWarn, text="Close", command=enWarn.destroy)
+        ewButt.config(font=('Fixedsys', 20), fg='darkblue')
+        ewButt.pack()
 
 def setDisplay(setHours):
     #This function displays the start escape time as a date 
@@ -700,13 +714,9 @@ yearEnter = Entry(welcomeRoot, width=10)
 yearEnter.grid(row=7, column=1, ipady=10, pady=3)
 yearEnter.config(font=('Fixedsys', 10))
 
-wEnterButton = Button(welcomeRoot, text="Enter", command=welEnterClick)
-wEnterButton.config(font=('Fixedsys', 15), fg='darkblue')
-wEnterButton.grid(column=2, row=7, columnspan=3)
-
-welcomeButton = Button(welcomeRoot, text="Close", command=welcomeRoot.destroy)
-welcomeButton.config(font=('Fixedsys', 20), fg='darkblue')
-welcomeButton.grid(column=0, row=8, columnspan=5)
+wEnterButton = Button(welcomeRoot, text="Enter and Close", command=welEnterClick)
+wEnterButton.config(font=('Fixedsys', 20), fg='darkblue')
+wEnterButton.grid(column=0, row=8, columnspan=5)
 
 
 #Label and enter box for the variables on the input frame
@@ -1409,14 +1419,17 @@ undoButt = Button(frame3, text="Undo", fg='darkgrey', command=undoClick, padx=10
 undoButt.config(font=('Fixedsys', 10), bg='lightgrey')
 undoButt.grid(column=0, row=1)
 
+#Declares Battery indicator
 batteryBar = ttk.Progressbar(frame1, style='bar.Vertical.TProgressbar', orient='vertical',mode='determinate',length=140)
 batteryBar.grid(row=2, column=5, padx=0, pady=0, rowspan=3)
 batteryBar['value'] = 20
 
+#Declares Battery Level label
 batteryLabel = Label(frame1, text="battery")
 batteryLabel.grid(row= 5, column = 5)
 batteryLabel.config(font=('Fixedsys', 10))
 
+#Function that updates battery bar and battery label
 def updateData():
         batteryBar['value'] = getBattery.GetBattery()
         batteryLabel['text'] = update_batteryLabel()
@@ -1427,10 +1440,11 @@ def updateData():
             batteryLabel.config(fg='black')
         root.after(2000, updateData)
 
+#Function that returns text to be displayed by battery label
 def update_batteryLabel():
     return f"Battery{batteryBar['value']}%"
 
 
-
 updateData()
+
 root.mainloop()

@@ -1,15 +1,15 @@
 
 import socket
-import time
-import keyboard
 import math
 
-HOST = "127.0.0.1"
+#ip address and port of pisugar power manager api
+#127.0.0.1 works only on pi, 192.168.1.2 allows you to run program on another computer that is on the same network
+HOST = "192.168.1.2"
 PORT = 8423
 
-#command = input("WHAT DO YOU WANT DA COMMAND TO SAY?")
 
 
+#Gets Battery percentage from pisugar api, converts into float, and truncates decimals.
 def GetBattery():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((HOST,PORT))
@@ -21,9 +21,8 @@ def GetBattery():
     data = float(data)
     data = math.trunc(data)
     return data 
-    
-print(GetBattery())
 
+#Returns True if battery is plugged into powersource, returns false if it isn't
 def GetBatteryPlugged():
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((HOST,PORT))
@@ -36,11 +35,3 @@ def GetBatteryPlugged():
         return True
     else:
         return False 
-print(GetBatteryPlugged())
-
-
-#data = data.decode('utf-8')
-#print(data)
-#if keyboard.is_pressed("q"):
-   # print("no more battery info")
-   # break
