@@ -1389,7 +1389,7 @@ def undoClick():
 
 #Declares "Enter" button
 enterButt = Button(frame1, text="Enter and Plot", fg="darkblue", command=enterplotClick, padx=20, pady=10)
-enterButt.grid(row=6, column=3, pady=10)
+enterButt.grid(row=6, column=2, pady=10, columnspan=2)
 enterButt.config(font=('Fixedsys', 10), bg='white')
 
 #Declares "Help" button
