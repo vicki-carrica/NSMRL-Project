@@ -104,17 +104,21 @@ The default tab is the input tab. This tab features inputs for submarine data, a
 </br>
 This tab prompts users to enter the number of fit survivors (sailors that have full use of both arms and can stand upright in the escape trunk), the number of unfit survivors, chlorate candles (that release oxygen), ExtendAir kits (that intake carbon dioxide), pressure in fsw, the percentage of the escape trunk flooded, the temperature in Fahrenheit, the concentration of both oxygen and carbon dioxide in %SEV (Surface Equivalence Value), and the number of survivors that have EABs.
 </br>
+</br>
 **Help**
 </br>
 The 'Help' button causes a pop up to display input information explaining what each input means as well as instructions on how to use the application. 
+</br>
 </br>
 **Enter**
 </br>
 The 'Enter' button accepts or rejects the inputs based on a set of parameters (for examples, the number of survivors cannot be negative and percentages cannot exceed 100) and displays the oxygen, carbon dioxide, and pressure SETs as well as the absolute SET as a date and time (for example, 1-1-2022 1:00). 
 </br>
+</br>
 **Plot Data**
 </br>
 The 'Plot Data' button records the pressure, oxygen concentration, and carbon dioxide concentration and adds the value to an array that is displayed on a spreadsheet (on the 'Data' tab) and is plotted on a graph once 2+ data points have been plotted (on the 'Graph' tab)
+</br>
 </br>
 **Battery**
 </br>
@@ -122,3 +126,40 @@ The battery percentage is displayed directly under the 'Help' button as both a n
 </br>
 
 ### Graph Tab
+
+The second tab is the 'Graph' tab that displays plots for oxygen, carbon dioxide, and pressure. The plots will show up after 2+ values are inputted.
+
+**Oxygen, Carbon Dioxide, and Pressure Tabs**
+</br>
+There are three tabs at the top of the 'Graph' tab which allows you to choose between the oxygen, carbon dioxide, and pressure plots.
+</br>
+</br>
+**Graph Toolbar: Home**
+</br>
+The first button (left to right) on the toolbar is the 'Home' button which resets the original view of the graph.
+</br>
+</br>
+**Graph Toolbar: Back and Forward**
+</br>
+The second and third buttons (left to right) on the toolbar are the back and forward buttons which goes back to the previous view or forward to the next view respectively.
+</br>
+</br>
+**Graph Toolbar: Move**
+</br>
+The fourth button (left to right) on the toolbar is the 'Move' button which allows you to navigate the graph and move along axises.
+</br>
+</br>
+**Graph Toolbar: Zoom**
+</br>
+The fifth button (left to right) on the toolbar is the 'Zoom' button which allows you to create a rectangle and zoom into that area.
+</br>
+</br>
+**Graph Toolbar: Configure**
+</br>
+The sixth button (left to right) on the toolbar is the 'Configure' button which allows you to change the dimensions of the graph.
+</br>
+</br>
+**Graph Toolbar: Save**
+</br>
+The seventh button (left to right) on the toolbar is the 'Save' button which allows you to save the graph to the Raspberry Pi.
+</br>
