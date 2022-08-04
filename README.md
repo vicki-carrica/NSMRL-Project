@@ -36,15 +36,26 @@ This repository contains the source code for both the Java and Python prototypes
 ### Files
 **GUI.py**
 </br>
-This file contains all of the code for the Graphical User Interface and is file that was ultimately used in the calculator. 
+This file contains all of the code for the Graphical User Interface and the math. 
+</br>
+**getBattery.py**
+</br>
+This file contains the code for obtaining the battery percentage and whether the battery is charging. 
+</br>
+**batteryGUI.py and battery-info.py**
+</br>
+These files were used to test obtaining battery information and were not used in the actual calculator. 
 </br>
 **SETCalculator.py**
 </br>
-This file contains the calculations for survival time, start escape time, and other formulas found on the Guard Book spreadsheet (contact us for a copy). 
+This file contains the calculations for survival time, start escape time, and other formulas found on the Guard Book spreadsheet (contact us for a copy) and was integrated into GUI.py so is not needed for the calculator. 
 </br>
 **Java files**
 </br>
 These files have the same function as the Python files but are less developed and are written in Java instead. Python files should be used for future development.
+</br>
+</br>
+GUI.py and getBattery.py were the only files that were ultimately used in the application and are the only files that must be downloaded for the application to function. 
 
 ## Getting Started
 
@@ -69,13 +80,13 @@ pip install numpy
 ```
   - For more information, see https://numpy.org/install/
 
-### Add GUI.py to an IDE
+### Add GUI.py and getBattery.py to an IDE
 
 We used Visual Studio Code as the Integrated Development Environment (IDE) but any IDE that supports Python 3 should work as well. 
 </br>
 For VS Code installation instructions, see https://docs.microsoft.com/en-us/visualstudio/install/install-visual-studio?view=vs-2022
 </br>
-Once you have an IDE, download GUI.py to your computer and open it using the ctrl + O shortcut
+Once you have an IDE, download GUI.py and getBattery.py to your computer and open the files using the ctrl + O shortcut
 
 ## Usage
 
@@ -83,8 +94,31 @@ Our SET calculator was designed to replace the tables, calculations, and graphs 
 
 ### Welcome Screen
 
-Upon opening the SET Calculator, you will see a welcome screen that explains the basics of the application as well as prompts users to input time (military time) and the date. The time and date are input so that SET can be displayed as the time and date that escape must commense. There is an "Enter" button to input the time and date and a close button that closes the welcome screen.
+Upon opening the SET Calculator, you will see a welcome screen that explains the basics of the application as well as prompts users to input time (military time) and the date. The time and date are input so that SET can be displayed as the time and date that escape must commense. There is an 'Enter and Close' button that records the time and date and closes the Welcome Screen. 
 
 ### Input Tab
 
-The default tab is the input tab. This tab prompts users to enter the number of fit survivors (sailors that have full use of both arms and can stand upright in the escape trunk), the number of unfit survivors, chlorate candles (that release oxygen), ExtendAir kits (that intake carbon dioxide), pressure in fsw, the percentage of the escape trunk flooded, the temperature in Fahrenheit, the concentration of both oxygen and carbon dioxide in %SEV (Surface Equivalence Value), and the number of survivors that have EABs. It has an 'Enter' button that calculates the SET and a "Plot Data" button which plots all of the data 
+The default tab is the input tab. This tab features inputs for submarine data, a 'Help' button, an 'Enter' button, a 'Plot Data' button, and the battery percentage. 
+
+**Inputs**
+</br>
+This tab prompts users to enter the number of fit survivors (sailors that have full use of both arms and can stand upright in the escape trunk), the number of unfit survivors, chlorate candles (that release oxygen), ExtendAir kits (that intake carbon dioxide), pressure in fsw, the percentage of the escape trunk flooded, the temperature in Fahrenheit, the concentration of both oxygen and carbon dioxide in %SEV (Surface Equivalence Value), and the number of survivors that have EABs.
+</br>
+**Help**
+</br>
+The 'Help' button causes a pop up to display input information explaining what each input means as well as instructions on how to use the application. 
+</br>
+**Enter**
+</br>
+The 'Enter' button accepts or rejects the inputs based on a set of parameters (for examples, the number of survivors cannot be negative and percentages cannot exceed 100) and displays the oxygen, carbon dioxide, and pressure SETs as well as the absolute SET as a date and time (for example, 1-1-2022 1:00). 
+</br>
+**Plot Data**
+</br>
+The 'Plot Data' button records the pressure, oxygen concentration, and carbon dioxide concentration and adds the value to an array that is displayed on a spreadsheet (on the 'Data' tab) and is plotted on a graph once 2+ data points have been plotted (on the 'Graph' tab)
+</br>
+**Battery**
+</br>
+The battery percentage is displayed directly under the 'Help' button as both a number and a slider. The number text turns green when it the battery and plugged in and charging and black otherwise.
+</br>
+
+### Graph Tab
