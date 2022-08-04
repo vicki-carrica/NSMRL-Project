@@ -72,10 +72,12 @@ book2.grid(row=0, column=0)
 oFrame = Frame(book2, width=750, height=380)
 coFrame = Frame(book2, width=750, height=380)
 pFrame = Frame(book2, width=750, height=380)
+intrFrame = Frame(book2, width=750, height=380)
 
 book2.add(oFrame, text="Oxygen")
 book2.add(coFrame, text="Carbon Dioxide")
 book2.add(pFrame, text="Pressure")
+book2.add(intrFrame, text="Intructions")
 
 #adds a Treeview spreadsheet to frame3 ("Data" tab)
 data = ttk.Treeview(frame3)
@@ -816,23 +818,33 @@ eabsLabel.config(font=('Fixedsys', 15))
 
 #Label that displays oxygen start escape time
 oSETLabel = Label(frame1, text=" ")
-oSETLabel.grid(row=7, column=0, columnspan=2)
+oSETLabel.grid(row=6, column=0, columnspan=2)
 oSETLabel.config(font=('Fixedsys', 12))
 
 #Label that displays carbon dioxide start escape time
 coSETLabel = Label(frame1, text=" ")
-coSETLabel.grid(row=8, column=0, columnspan=2)
+coSETLabel.grid(row=7, column=0, columnspan=2)
 coSETLabel.config(font=('Fixedsys', 12))
 
 #Label that displays pressure start escape time
 eabSETLabel = Label(frame1, text=" ")
-eabSETLabel.grid(row=7, column=2, columnspan=2)
+eabSETLabel.grid(row=8, column=0, columnspan=2)
 eabSETLabel.config(font=('Fixedsys', 12))
 
 #Label that displays pressure start escape time
 SETLabel = Label(frame1, text=" ")
-SETLabel.grid(row=8, column=2, columnspan=2)
+SETLabel.grid(row=7, column=2, columnspan=2)
 SETLabel.config(font=('Fixedsys', 12))
+
+#Instructions (on the second tab):
+instructionLabel = Label(intrFrame, text="Instructions:", fg='darkblue')
+instructionLabel.grid(row=0, column=0)
+instructionLabel.config(font=('Fixedsys', 20))
+#String that contains instructions:
+instr = "1) Input atmospheric data found on the submarine in the corresponding slots.\n\n2a) Press 'Enter' to calculate the Start Escape Time (SET).\n2b) Press 'Plot Data' to record and graph the atmospheric data.\n\n3) Click the 'Data' tab to view the plotted data.\n   - Click 'Delete' to delete a plotted data point\n   - Click 'Undo' to undo a deletion\n\n4) Plot data periodically (about every 30 minutes unless data changes dramatically)\n\n5) Once there are 2+ plotted data points, click the 'Graph' tab to view atmospheric trends and \npredicted SET.\n   -To update the graph after a change, click the move button (fourth from the right on the\n toolbar) and change the view.\n   - Click the home button (first from the right) to return to the default view.\n\n6) Repeat these steps periodically to have the most accurate and updated SET."
+instructions = Label(intrFrame, text=instr)
+instructions.grid(row=1, column=0, sticky='w')
+instructions.config(font=('Fixedsys', 10))
 
 #Creates figures to place graphs on
 fO = Figure(figsize=(10,4.2), dpi=80) 
@@ -908,8 +920,10 @@ data.heading("Pressure FSW", text="Pressure (FSW)", anchor=W)
 #Adds the spreadsheet onto the frame
 data.grid(column=0, row=0, ipadx=280, ipady=67, columnspan=2)
 
-def enterClick():
+def enterplotClick():
     #This function collects the data from the enter boxes and displays the calculated survival times/start escape times
+
+    global counter
 
     #Attemps to collect the numbers from each of the enter boxes. 
     try:
@@ -935,6 +949,40 @@ def enterClick():
             hour8760 += timeElapsed
             timeStart = time.time()
 
+            #counter serves as a way to track the amount of times the button is clicked. On the first click, the start time should begin
+            global start
+            counter=counter+1
+
+            if counter==1:
+                start = time.time()
+
+            #Adds the data in the enter boxes to the array of Y values
+            oxY.append(float(oxEnter.get()))
+            coY.append(float(coEnter.get()))
+            pY.append(float(pressEnter.get()))
+
+            
+            #sets the time (for the X value) to the current time subtracted by the start time (set on the first click)
+            current = time.time()
+            t =(current - start)/60
+            thr = t/60
+
+            #adds the time (in hours) to the array of X values
+            oxX.append(thr)
+            coX.append(thr)
+            pX.append(thr)
+
+
+            #Creates the line of best fit 
+            #Will plot the line of best fit only if there is more than one point
+            if (counter > 1):
+                plotGraphs(oxX, oxY, coX, coY, pX, pY, fitSurv)
+
+            #rounds down the minutes to a whole number:
+            ti = math.floor(t)
+
+            #inserts the data point into the spreadsheet
+            data.insert(parent='', index='end', iid=(counter-1), values=(ti, oxEnter.get(), coEnter.get(), pressEnter.get()))
 
             #To track whether the inputs are valid
             warnText = ""
@@ -1080,6 +1128,19 @@ def enterClick():
             break
     #If any of the boxes have invalid inputs (blank or inconsistent with casting), a ValueError will be catched and a warning box will pop up
     except ValueError:
+        #Undos anything done before displaying the error
+        counter = counter - 1
+        oxylen = len(oxY)
+        coylen = len(coY)
+        pylen = len(pY)
+        #if the length of the oxygen array is greater, delete the added value
+        if (oxylen>coylen):
+            del oxY[int(oxylen-1)]
+        elif (coylen>pylen):
+            #if the length of co2 is greater than pressure, delete the latest co2 and oxygen indexes 
+            del oxY[int(oxylen-1)]
+            del coY[int(oxylen-1)]
+
         enterWarn = Toplevel(root)
         enterWarn.title("VALUE ERROR")
         enterWarn.geometry("400x200")
@@ -1151,7 +1212,7 @@ def helpClick():
     floodLabel = Label(h1, text="Percent Flooded:", anchor=W)
     floodLabel.grid(row=8, column=0)
     floodLabel.config(font=('Fixedsys', 15))
-    floodInfo = Label(h1, text="Percentage of the compartment that is flooded, measurement found on submarine")
+    floodInfo = Label(h1, text="Percentage of the compartment that is flooded rounded to the nearest 20%")
     floodInfo.grid(row=9, column=0)
     floodInfo.config(font=('Fixedsys', 10))
 
@@ -1193,74 +1254,6 @@ def helpClick():
     hButt.grid(row=2, column=0)
 
 
-def plotClick():
-    #This functions stores the data in the enter boxes, graphs it, and adds it to the spreadsheet when the "Plot Data" button is clicked
-
-    global counter
-
-
-    try:
-        #counter serves as a way to track the amount of times the button is clicked. On the first click, the start time should begin
-        global start
-        counter=counter+1
-
-        fitSurv = fitEnter.get()
-
-        if counter==1:
-            start = time.time()
-
-        #Adds the data in the enter boxes to the array of Y values
-        oxY.append(float(oxEnter.get()))
-        coY.append(float(coEnter.get()))
-        pY.append(float(pressEnter.get()))
-
-        
-        #sets the time (for the X value) to the current time subtracted by the start time (set on the first click)
-        current = time.time()
-        t =(current - start)/60
-        thr = t/60
-
-        #adds the time (in hours) to the array of X values
-        oxX.append(thr)
-        coX.append(thr)
-        pX.append(thr)
-
-
-
-        #Creates the line of best fit 
-        #Will plot the line of best fit only if there is more than one point
-        if (counter > 1):
-            plotGraphs(oxX, oxY, coX, coY, pX, pY, fitSurv)
-
-        #rounds down the minutes to a whole number:
-        ti = math.floor(t)
-
-        #inserts the data point into the spreadsheet
-        data.insert(parent='', index='end', iid=(counter-1), values=(ti, oxEnter.get(), coEnter.get(), pressEnter.get()))
-    except ValueError:
-        #Undos anything done before displaying the error
-        counter = counter - 1
-        oxylen = len(oxY)
-        coylen = len(coY)
-        pylen = len(pY)
-        #if the length of the oxygen array is greater, delete the added value
-        if (oxylen>coylen):
-            del oxY[int(oxylen-1)]
-        elif (coylen>pylen):
-            #if the length of co2 is greater than pressure, delete the latest co2 and oxygen indexes 
-            del oxY[int(oxylen-1)]
-            del coY[int(oxylen-1)]
-        
-
-        plotWarn = Toplevel(root)
-        plotWarn.title("VALUE ERROR")
-        plotWarn.geometry("400x200")
-        pwLabel = Label(plotWarn, text="Invalid Inputs\nOnly numbers and decimal inputs\nDo not leave fields blank\n")
-        pwLabel.config(font=('Fixedsys', 15))
-        pwLabel.pack()
-        pwButt = Button(plotWarn, text="Close", command=plotWarn.destroy)
-        pwButt.config(font=('Fixedsys', 20), fg='darkblue')
-        pwButt.pack()
 
 def deleteClick():
     #This function deletes the plotted data points from the spreadsheet and the graph 
@@ -1395,14 +1388,9 @@ def undoClick():
 
 
 #Declares "Enter" button
-enterButt = Button(frame1, text="Enter", fg="darkblue", command=enterClick, padx=20, pady=10)
-enterButt.grid(row=6, column=1, pady=10)
+enterButt = Button(frame1, text="Enter and Plot", fg="darkblue", command=enterplotClick, padx=20, pady=10)
+enterButt.grid(row=6, column=3, pady=10)
 enterButt.config(font=('Fixedsys', 10), bg='white')
-
-#Declares "Plot Data" button
-plotDataButt = Button(frame1, text="Plot Data", fg="darkblue", command = plotClick, padx=20, pady=10)
-plotDataButt.grid(row=6, column=3)
-plotDataButt.config(font=('Fixedsys', 10), bg='white')
 
 #Declares "Help" button
 helpButt = Button(frame1, text="Help", fg="darkblue", command=helpClick, padx=20, pady=10)
