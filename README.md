@@ -110,14 +110,9 @@ This tab prompts users to enter the number of fit survivors (sailors that have f
 The 'Help' button causes a pop up to display input information explaining what each input means as well as instructions on how to use the application. 
 </br>
 </br>
-**Enter**
+**Enter and Plot**
 </br>
-The 'Enter' button accepts or rejects the inputs based on a set of parameters (for examples, the number of survivors cannot be negative and percentages cannot exceed 100) and displays the oxygen, carbon dioxide, and pressure SETs as well as the absolute SET as a date and time (for example, 1-1-2022 1:00). 
-</br>
-</br>
-**Plot Data**
-</br>
-The 'Plot Data' button records the pressure, oxygen concentration, and carbon dioxide concentration and adds the value to an array that is displayed on a spreadsheet (on the 'Data' tab) and is plotted on a graph once 2+ data points have been plotted (on the 'Graph' tab)
+The 'Enter and Plot' button accepts or rejects the inputs based on a set of parameters (for examples, the number of survivors cannot be negative and percentages cannot exceed 100) and displays the oxygen, carbon dioxide, and pressure SETs as well as the absolute SET as a date and time (for example, 1-1-2022 1:00). It also records the pressure, oxygen concentration, and carbon dioxide concentration and adds the value to an array that is displayed on a spreadsheet (on the 'Data' tab) and is plotted on a graph once 2+ data points have been plotted (on the 'Graph' tab).
 </br>
 </br>
 **Battery**
@@ -127,7 +122,7 @@ The battery percentage is displayed directly under the 'Help' button as both a n
 
 ### Graph Tab
 
-The second tab is the 'Graph' tab that displays plots for oxygen, carbon dioxide, and pressure. The plots will show up after 2+ values are inputted.
+The second tab is the 'Graph' tab that displays plots for oxygen, carbon dioxide, and pressure. It also has a tab that displays the application intructions. The plots will show up after 2+ values are inputted.
 
 **Oxygen, Carbon Dioxide, and Pressure Tabs**
 </br>
@@ -163,3 +158,27 @@ The sixth button (left to right) on the toolbar is the 'Configure' button which 
 </br>
 The seventh button (left to right) on the toolbar is the 'Save' button which allows you to save the graph to the Raspberry Pi.
 </br>
+
+### Data Tab
+
+The third tab is the 'Data' tab that displays all of the plotted atmospheric data on a spreadsheet. It also has a delete and undo button that allows you to delete inputted data points.
+
+**Delete**
+</br>
+This button allows you to select a row on the spreadsheet of inputted data points and delete the values from the spreadsheet and graphs. 
+</br>
+</br>
+**Undo**
+</br>
+This undos a deletion on the spreadsheet as well on the graphs.
+</br>
+
+
+## Contributions 
+
+We welcome contributions! Fork the repository and commit any editted files to save changes. Please be conscious of crediting our work when changes are made.
+
+## Acknowledgements
+
+We'd like to thank SEAP for the opportunity to intern with the Navy and engage in a STEM project this summer. We would also like to thank the Naval Submarine Medical Research Laboratory for making the internship a meaningful experience and for being incredibly welcoming and helpful.
+We would like to give a special thank you to Dr. Casper and Dr. Bolkhovsky for the time they committed into making our summer educational and worthwhile.
