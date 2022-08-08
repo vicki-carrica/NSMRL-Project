@@ -176,7 +176,7 @@ This undos a deletion on the spreadsheet as well on the graphs.
 
 ## Contributions 
 
-We welcome contributions! Fork the repository and commit any editted files to save changes. Please be conscious of crediting our work when changes are made.
+We welcome contributions! Fork the repository and commit any edited files to save changes. Please be conscious of crediting our work when changes are made.
 
 ## Acknowledgements
 
