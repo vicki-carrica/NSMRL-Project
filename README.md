@@ -7,7 +7,7 @@ This GitHub repository contains the source code that was used to create a Start 
 </br>
 **Ledyard High School, Class of 2023**
 </br>
-Builder
+Product Designer
 </br>
 Contact: roal1878@gmail.com
 
@@ -16,7 +16,7 @@ Contact: roal1878@gmail.com
 </br>
 **Old Saybrook High School, Class of 2023**
 </br>
-Programmer
+Software Developer
 </br>
 Contact: vickicarrica@yahoo.com
 
