@@ -99,7 +99,7 @@ Our SET calculator was designed to replace the tables, calculations, and graphs 
 
 ### Welcome Screen
 
-Upon opening the SET Calculator, you will see a welcome screen that explains the basics of the application as well as prompts users to input time (military time) and the date. The time and date are input so that SET can be displayed as the time and date that escape must commense. There is an 'Enter and Close' button that records the time and date and closes the Welcome Screen. 
+Upon opening the SET Calculator, you will see a welcome screen that explains the basics of the application as well as prompts users to input time (military time) and the date. The time and date are input so that SET can be displayed as the time and date that escape must commence. There is an 'Enter and Close' button that records the time and date and closes the Welcome Screen. 
 
 ### Input Tab
 
