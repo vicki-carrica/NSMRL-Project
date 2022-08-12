@@ -401,9 +401,6 @@ storeCO = []
 storeP = []
 storeIndex = []
 
-#Variables for battery
-HOST = "127.0.0.1"
-PORT = 8423
 
 #Declaration of global date and time variables 
 hr = 0
